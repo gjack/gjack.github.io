@@ -1,7 +1,11 @@
 module.exports = {
   siteMetadata: {
-    siteUrl: "https://www.yourdomain.tld",
-    title: "gabijackcom-gatsby",
+    siteUrl: "https://gabijack.com",
+    title: "Gabi Jack",
+    description: "Gabi Jack's blog and personal site",
+    twitter: 'alluneediscode'
   },
-  plugins: [],
+  plugins: [
+    'gatsby-plugin-react-helmet'
+  ],
 };
