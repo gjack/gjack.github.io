@@ -23,6 +23,7 @@ module.exports = {
       }
     },
     'gatsby-plugin-image',
-    'gatsby-plugin-sharp'
+    'gatsby-plugin-sharp',
+    'gatsby-transformer-sharp'
   ],
 };
