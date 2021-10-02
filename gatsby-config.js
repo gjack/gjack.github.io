@@ -3,7 +3,8 @@ module.exports = {
     siteUrl: "https://gabijack.com",
     title: "Gabi Jack",
     description: "Gabi Jack's blog and personal site",
-    twitter: 'alluneediscode'
+    twitter: 'alluneediscode',
+    siteUrl: 'https://gabijack.com'
   },
   plugins: [
     'gatsby-plugin-react-helmet',
