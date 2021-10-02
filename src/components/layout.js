@@ -4,18 +4,22 @@ import { Link } from "gatsby"
 
 const bodyStyles = {
   mx: '2rem',
-  padding: '1rem'
+  padding: '1rem',
+  display: 'flex',
+  flexDirection: 'column',
+  minHeight: '100vh'
 }
 
 const headerStyles = {
   paddingLeft: `10px`,
+  width: '100%'
 }
 
 const mainStyles = {
   maxWidth: `container`,
   padding: `1rem`,
-  mx: `auto`,
   textAlign: `center`,
+  flex: '1 1 auto'
 }
 
 const footerStyles = {
