@@ -25,6 +25,18 @@ module.exports = {
     },
     'gatsby-plugin-image',
     'gatsby-plugin-sharp',
-    'gatsby-transformer-sharp'
+    'gatsby-transformer-sharp',
+    {
+      resolve: 'gatsby-plugin-manifest',
+      options: {
+        name: `Gabi Jack`,
+        short_name: `Gabi Jack`,
+        start_url: `/`,
+        background_color: `#f7f0eb`,
+        theme_color: `#a2466c`,
+        display: `standalone`,
+        icon: 'src/images/gabicon.png'
+      }
+    }
   ],
 };
