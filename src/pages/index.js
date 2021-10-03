@@ -1,8 +1,9 @@
-import * as React from "react"
+/** @jsx jsx */
+import { jsx } from "theme-ui"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { graphql, Link } from "gatsby"
-import { Box, Image, Grid, Divider } from "theme-ui"
+import { Box, Image, Grid } from "theme-ui"
 import GJack from "../images/gabijackpic.png"
 
 // markup
@@ -24,9 +25,28 @@ const IndexPage = ({ data }) => {
           marginTop: "3rem",
         }}
       />
-      <Divider sx={{ color: "lightgrey" }} />
+      <hr
+        sx={{
+          color: "lightgrey",
+          textAlign: "center",
+          width: "90%",
+          border: "none",
+          borderTop: "3px double lightgrey",
+          color: "lightgrey",
+          overflow: "visible",
+          height: "5px",
+          my: 5,
+          ":after": {
+            background: "#fff",
+            content: '"\\270E"',
+            padding: "0 4px",
+            position: "relative",
+            top: "-13px",
+          },
+        }}
+      />
       <h3>Most recent posts</h3>
-      <Grid gap={4} width={"3rem"} repeat={"fit"}>
+      <Grid gap={4} width={"3rem"} repeat={"fit"} sx={{ marginBottom: 5 }}>
         {posts.map((post) => (
           <Box sx={{ textAlign: "justify" }}>
             <Link to={post.slug} key={post.slug}>
