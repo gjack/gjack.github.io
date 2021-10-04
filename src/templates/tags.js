@@ -6,12 +6,21 @@ import { graphql, Link } from "gatsby"
 import { Themed } from "@theme-ui/mdx"
 import TagsList from "../components/tags_list"
 
-const Blog = ({ data }) => {
-  const posts = data.allMdx.nodes
+// Components
+
+const Tags = ({ pageContext, data }) => {
+  const { tag } = pageContext
+  const { edges, totalCount } = data.allMdx
+
+  const tagHeader = `${totalCount} post${
+    totalCount === 1 ? "" : "s"
+  } tagged with "${tag}"`
+
+  const pageTitle = `Category:${tag}`
 
   return (
     <Layout>
-      <SEO title={"Blog"} />
+      <SEO title={pageTitle} />
       <main
         sx={{
           display: "grid",
@@ -20,7 +29,7 @@ const Blog = ({ data }) => {
         }}
       >
         <div sx={{ textAlign: "justify" }}>
-          <Themed.h2 sx={{ px: 3 }}>Recent posts</Themed.h2>
+          <Themed.h2 sx={{ px: 3 }}>{`Posts in category ${tag}`}</Themed.h2>
           <ul
             sx={{
               listStyle: "none",
@@ -29,9 +38,9 @@ const Blog = ({ data }) => {
               py: 4,
             }}
           >
-            {posts.map((post) => (
+            {edges.map(({ node }) => (
               <li
-                key={post.id}
+                key={node.id}
                 sx={{
                   mb: 4,
                 }}
@@ -42,8 +51,8 @@ const Blog = ({ data }) => {
                   }}
                 >
                   <Link
-                    to={`/${post.slug}`}
-                    key={post.id}
+                    to={`/${node.slug}`}
+                    key={node.id}
                     sx={{
                       color: "inherit",
                       textDecoration: "none",
@@ -53,13 +62,13 @@ const Blog = ({ data }) => {
                       },
                     }}
                   >
-                    {post.frontmatter.title}
+                    {node.frontmatter.title}
                   </Link>
                 </Themed.h3>
                 <small sx={{ fontWeight: "bold" }}>
-                  {post.frontmatter.date}
+                  {node.frontmatter.date}
                 </small>
-                <Themed.p>{post.excerpt}</Themed.p>
+                <Themed.p>{node.excerpt}</Themed.p>
               </li>
             ))}
           </ul>
@@ -72,20 +81,27 @@ const Blog = ({ data }) => {
   )
 }
 
+export default Tags
+
 export const pageQuery = graphql`
-  {
-    allMdx(sort: { fields: [frontmatter___date], order: DESC }) {
-      nodes {
-        id
-        slug
-        excerpt(truncate: true, pruneLength: 150)
-        frontmatter {
-          title
-          date(formatString: "DD MMMM, YYYY")
+  query ($tag: String) {
+    allMdx(
+      limit: 2000
+      sort: { fields: [frontmatter___date], order: DESC }
+      filter: { frontmatter: { tags: { in: [$tag] } } }
+    ) {
+      totalCount
+      edges {
+        node {
+          id
+          slug
+          frontmatter {
+            title
+            date(formatString: "DD MMMM, YYYY")
+          }
+          excerpt(truncate: true, pruneLength: 150)
         }
       }
-      totalCount
     }
   }
 `
-export default Blog
