@@ -7,20 +7,6 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   const tagTemplate = path.resolve("src/templates/tags.js")
   const result = await graphql(`
     {
-      postsRemark: allMdx(
-        sort: { order: DESC, fields: [frontmatter___date] }
-        limit: 2000
-      ) {
-        edges {
-          node {
-            slug
-
-            frontmatter {
-              tags
-            }
-          }
-        }
-      }
       tagsGroup: allMdx(limit: 2000) {
         group(field: frontmatter___tags) {
           fieldValue
