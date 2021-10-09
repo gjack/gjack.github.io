@@ -46,9 +46,22 @@ const IndexPage = ({ data }) => {
         }}
       />
       <h3>Most recent posts</h3>
-      <Grid gap={4} width={"3rem"} repeat={"fit"} sx={{ marginBottom: 5 }}>
+      <Grid
+        gap={4}
+        columns={[1, null, 3]}
+        repeat={"fit"}
+        sx={{ marginBottom: 5 }}
+      >
         {posts.map((post) => (
-          <Box sx={{ textAlign: "justify" }}>
+          <Box
+            sx={{
+              textAlign: "justify",
+              padding: "1.25rem",
+              backgroundColor: "rgba(243, 244, 246, 0.9)",
+              borderRadius: "5%",
+              boxShadow: "0px 9px 9px 1px rgb(0 0 70 / 20%)",
+            }}
+          >
             <Link to={post.slug} key={post.slug}>
               <h3>{post.frontmatter.title}</h3>
               <div>{post.excerpt}</div>

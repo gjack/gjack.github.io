@@ -22,6 +22,7 @@ const headerStyles = {
   zIndex: "1000",
   backgroundColor: "white",
   borderBottom: "1px solid lightgrey",
+  boxShadow: "0px 7px 9px 1px rgb(0 0 70 / 20%)",
 }
 
 const mainStyles = {
