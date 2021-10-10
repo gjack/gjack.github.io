@@ -5,6 +5,8 @@ import SEO from "../components/seo"
 import { graphql, Link } from "gatsby"
 import { Themed } from "@theme-ui/mdx"
 import TagsList from "../components/tags_list"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faClock, faCalendarAlt } from "@fortawesome/free-regular-svg-icons"
 
 const Blog = ({ data }) => {
   const posts = data.allMdx.nodes
@@ -56,9 +58,18 @@ const Blog = ({ data }) => {
                     {post.frontmatter.title}
                   </Link>
                 </Themed.h3>
-                <small sx={{ fontWeight: "bold" }}>
-                  {post.frontmatter.date}
-                </small>
+                <div sx={{ display: "flex", flexDirection: "column" }}>
+                  <small sx={{ fontWeight: "bold" }}>
+                    <FontAwesomeIcon icon={faCalendarAlt} />
+                    <span sx={{ mx: "0.5rem" }}>{post.frontmatter.date}</span>
+                  </small>
+                  <small>
+                    <FontAwesomeIcon icon={faClock} />
+                    <span sx={{ mx: "0.5rem" }}>{`${post.timeToRead} ${
+                      post.timeToRead === 1 ? "minute" : "minutes"
+                    }`}</span>
+                  </small>
+                </div>
                 <Themed.p>{post.excerpt}</Themed.p>
               </li>
             ))}
@@ -79,9 +90,10 @@ export const pageQuery = graphql`
         id
         slug
         excerpt(truncate: true, pruneLength: 150)
+        timeToRead
         frontmatter {
           title
-          date(formatString: "DD MMMM, YYYY")
+          date(formatString: "MMMM DD, YYYY")
         }
       }
       totalCount

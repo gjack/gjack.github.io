@@ -6,7 +6,13 @@ import Layout from "../components/layout"
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
 import SEO from "../components/seo"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"
+import {
+  faArrowLeft,
+  faArrowRight,
+  faTag,
+} from "@fortawesome/free-solid-svg-icons"
+import { faClock, faCalendarAlt } from "@fortawesome/free-regular-svg-icons"
+import { kebabCase } from "lodash"
 
 const BlogPostPage = ({ data }) => {
   const post = data.mdx
@@ -27,11 +33,41 @@ const BlogPostPage = ({ data }) => {
             image={seoImage}
             imageAlt={post.frontmatter.imageAlt}
           />
-          {image && (
-            <GatsbyImage image={image} alt={post.frontmatter.imageAlt} />
-          )}
           <h1>{post.frontmatter.title}</h1>
-          <MDXRenderer>{post.body}</MDXRenderer>
+          <div sx={{ textAlign: "justify" }}>
+            <div
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                marginBottom: "3rem",
+              }}
+            >
+              <small sx={{ fontWeight: "bold" }}>
+                <FontAwesomeIcon icon={faCalendarAlt} />
+                <span sx={{ mx: "0.5rem" }}>{post.frontmatter.date}</span>
+              </small>
+              <small>
+                <FontAwesomeIcon icon={faClock} />
+                <span sx={{ mx: "0.5rem" }}>{`${post.timeToRead} ${
+                  post.timeToRead === 1 ? "minute read" : "minutes read"
+                }`}</span>
+              </small>
+              <small>
+                <span>
+                  {post.frontmatter.tags.map((tag, idx) => (
+                    <Link to={`/tags/${kebabCase(tag)}/`} key={`${tag}-${idx}`}>
+                      <FontAwesomeIcon icon={faTag} />
+                      <span sx={{ mx: "0.3rem" }}>{tag}</span>
+                    </Link>
+                  ))}
+                </span>
+              </small>
+            </div>
+            {image && (
+              <GatsbyImage image={image} alt={post.frontmatter.imageAlt} />
+            )}
+            <MDXRenderer>{post.body}</MDXRenderer>
+          </div>
         </article>
         <div>
           <div sx={{ display: "flex" }}>
@@ -82,6 +118,8 @@ export const query = graphql`
     mdx(id: { eq: $id }) {
       frontmatter {
         title
+        tags
+        date(formatString: "MMMM DD, YYYY")
         image {
           childImageSharp {
             gatsbyImageData(layout: CONSTRAINED)
@@ -91,6 +129,7 @@ export const query = graphql`
       }
       id
       body
+      timeToRead
     }
     allMdx(sort: { fields: frontmatter___date, order: ASC }) {
       edges {
