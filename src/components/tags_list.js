@@ -27,9 +27,19 @@ const TagsList = () => {
           py: 4,
         }}
       >
-        <Grid gap={2} columns={[2, null, 2]}>
+        <Grid gap={3} columns={[2, null, 2]}>
           {tags.map((tag) => (
-            <Box key={tag.fieldValue}>
+            <Box
+              key={tag.fieldValue}
+              sx={{
+                textAlign: "center",
+                padding: "0",
+                backgroundColor: "rgba(243, 244, 246, 0.9)",
+                borderRadius: "12px",
+                boxShadow: "0px 9px 9px 1px rgb(0 0 70 / 20%)",
+                border: "1px solid rgba(243, 244, 246, 1)",
+              }}
+            >
               <li key={tag.fieldValue}>
                 <Link
                   to={`/tags/${kebabCase(tag.fieldValue)}/`}
