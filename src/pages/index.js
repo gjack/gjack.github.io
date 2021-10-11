@@ -25,6 +25,31 @@ const IndexPage = ({ data }) => {
           marginTop: "3rem",
         }}
       />
+      <article sx={{ my: "3rem", textAlign: "justify" }}>
+        <p>
+          Hello and welcome! Thank you for taking the time to visit my tiny
+          corner of the web! My name is Gabi Jack, and I'm a Software Engineer
+          in the greater Toledo, OH area. My daily job involves writing Ruby on
+          Rails and React applications, but I also enjoy dabbling in other
+          programming languages, such as C++ and Python, as well as
+          experimenting with other frameworks and technologies.
+        </p>
+        <p>
+          In a previous life, before becoming a software developer, I graduated
+          college with a BS in Mechanical Engineering, and worked for a few
+          years doing design and optimization of thermal energy systems.
+          Perhaps, this explains why I still keep a certain fondness for Math,
+          Physics and all things related to computer aided mechanical design.
+        </p>
+        <p>
+          When I'm not working, I enjoy reading, knitting, growing roses, and
+          spending time with my husband, our two boys and our little mini
+          schnauzer. My hope is to make this a place to blog about all things
+          that I'm learning and exploring, with an emphasis on software
+          development. Hopefully, I may also manage to write something
+          interesting from time to time.
+        </p>
+      </article>
       <hr
         sx={{
           color: "lightgrey",
