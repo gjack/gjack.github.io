@@ -87,7 +87,7 @@ const IndexPage = ({ data }) => {
               boxShadow: "0px 9px 9px 1px rgb(0 0 70 / 20%)",
             }}
           >
-            <Link to={post.slug} key={post.slug}>
+            <Link to={`/blog/${post.slug}`} key={post.slug}>
               <h3>{post.frontmatter.title}</h3>
               <div>{post.excerpt}</div>
             </Link>

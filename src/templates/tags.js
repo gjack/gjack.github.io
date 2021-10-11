@@ -51,7 +51,7 @@ const Tags = ({ pageContext, data }) => {
                   }}
                 >
                   <Link
-                    to={`/${node.slug}`}
+                    to={`/blog/${node.slug}`}
                     key={node.id}
                     sx={{
                       color: "inherit",

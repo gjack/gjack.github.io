@@ -1,10 +1,10 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
+import Layout from "../../components/layout"
+import SEO from "../../components/seo"
 import { graphql, Link } from "gatsby"
 import { Themed } from "@theme-ui/mdx"
-import TagsList from "../components/tags_list"
+import TagsList from "../../components/tags_list"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faClock, faCalendarAlt } from "@fortawesome/free-regular-svg-icons"
 
@@ -44,7 +44,7 @@ const Blog = ({ data }) => {
                   }}
                 >
                   <Link
-                    to={`/${post.slug}`}
+                    to={`/blog/${post.slug}`}
                     key={post.id}
                     sx={{
                       color: "inherit",

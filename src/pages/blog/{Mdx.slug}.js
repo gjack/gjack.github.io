@@ -2,9 +2,9 @@
 import { jsx } from "theme-ui"
 import { graphql, Link } from "gatsby"
 import { MDXRenderer } from "gatsby-plugin-mdx"
-import Layout from "../components/layout"
+import Layout from "../../components/layout"
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
-import SEO from "../components/seo"
+import SEO from "../../components/seo"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faArrowLeft,
@@ -72,7 +72,10 @@ const BlogPostPage = ({ data }) => {
         <div>
           <div sx={{ display: "flex" }}>
             {edge.previous && (
-              <Link sx={{ textAlign: "left" }} to={`/${edge.previous.slug}`}>
+              <Link
+                sx={{ textAlign: "left" }}
+                to={`/blog/${edge.previous.slug}`}
+              >
                 <div sx={{ display: "flex", flexDirection: "row" }}>
                   <FontAwesomeIcon icon={faArrowLeft} size={"lg"} />
                   <div
@@ -90,7 +93,7 @@ const BlogPostPage = ({ data }) => {
             )}
             <div sx={{ mx: "auto" }} />
             {edge.next && (
-              <Link sx={{ textAlign: "right" }} to={`/${edge.next.slug}`}>
+              <Link sx={{ textAlign: "right" }} to={`/blog/${edge.next.slug}`}>
                 <div sx={{ display: "flex", flexDirection: "row" }}>
                   <div
                     sx={{
