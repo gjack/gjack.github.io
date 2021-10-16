@@ -1,15 +1,20 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui"
-import Layout from "../../components/layout"
-import SEO from "../../components/seo"
+import Layout from "../components/layout"
+import SEO from "../components/seo"
 import { graphql, Link } from "gatsby"
 import { Themed } from "@theme-ui/mdx"
-import TagsList from "../../components/tags_list"
+import TagsList from "../components/tags_list"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faClock, faCalendarAlt } from "@fortawesome/free-regular-svg-icons"
 
-const Blog = ({ data }) => {
+const Blog = ({ pageContext, data }) => {
   const posts = data.allMdx.nodes
+  const { currentPage, numPages } = pageContext
+  const isFirst = currentPage === 1
+  const isLast = currentPage === numPages
+  const prevPage = currentPage - 1 === 1 ? "/blog" : `/blog/${currentPage - 1}`
+  const nextPage = `/blog/${currentPage + 1}`
 
   return (
     <Layout>
@@ -74,6 +79,25 @@ const Blog = ({ data }) => {
               </li>
             ))}
           </ul>
+          {!isFirst && (
+            <Link to={prevPage} rel="prev">
+              ← Previous Page
+            </Link>
+          )}
+          {numPages > 1 &&
+            Array.from({ length: numPages }, (_, i) => (
+              <Link
+                key={`pagination-number${i + 1}`}
+                to={`/blog/${i === 0 ? "" : i + 1}`}
+              >
+                {i + 1}
+              </Link>
+            ))}
+          {!isLast && (
+            <Link to={nextPage} rel="next">
+              Next Page →
+            </Link>
+          )}
         </div>
         <aside>
           <TagsList />
@@ -84,8 +108,12 @@ const Blog = ({ data }) => {
 }
 
 export const pageQuery = graphql`
-  {
-    allMdx(sort: { fields: [frontmatter___date], order: DESC }) {
+  query blogPageQuery($skip: Int!, $limit: Int!) {
+    allMdx(
+      sort: { fields: [frontmatter___date], order: DESC }
+      limit: $limit
+      skip: $skip
+    ) {
       nodes {
         id
         slug
