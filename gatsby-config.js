@@ -15,7 +15,20 @@ module.exports = {
         name: "posts",
       },
     },
-    "gatsby-plugin-mdx",
+    "gatsby-remark-images",
+    {
+      resolve: `gatsby-plugin-mdx`,
+      options: {
+        gatsbyRemarkPlugins: [
+          {
+            resolve: `gatsby-remark-images`,
+            options: {
+              maxWidth: 600,
+            },
+          },
+        ],
+      },
+    },
     {
       resolve: "gatsby-plugin-theme-ui",
       options: {
