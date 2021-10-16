@@ -7,6 +7,7 @@ import { Themed } from "@theme-ui/mdx"
 import TagsList from "../components/tags_list"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faClock, faCalendarAlt } from "@fortawesome/free-regular-svg-icons"
+import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"
 
 const Blog = ({ pageContext, data }) => {
   const posts = data.allMdx.nodes
@@ -79,25 +80,37 @@ const Blog = ({ pageContext, data }) => {
               </li>
             ))}
           </ul>
-          {!isFirst && (
-            <Link to={prevPage} rel="prev">
-              ← Previous Page
-            </Link>
-          )}
-          {numPages > 1 &&
-            Array.from({ length: numPages }, (_, i) => (
-              <Link
-                key={`pagination-number${i + 1}`}
-                to={`/blog/${i === 0 ? "" : i + 1}`}
-              >
-                {i + 1}
+          <div sx={{ display: "flex", flexDirection: "row" }}>
+            {!isFirst && (
+              <Link to={prevPage} rel="prev" sx={{ textAlign: "left" }}>
+                <FontAwesomeIcon icon={faArrowLeft} size={"lg"} />
+                <span sx={{ mx: "0.5rem" }}>Previous Page</span>
               </Link>
-            ))}
-          {!isLast && (
-            <Link to={nextPage} rel="next">
-              Next Page →
-            </Link>
-          )}
+            )}
+            {numPages > 1 &&
+              Array.from({ length: numPages }, (_, i) => (
+                <Link
+                  key={`pagination-number${i + 1}`}
+                  to={`/blog/${i === 0 ? "" : i + 1}`}
+                >
+                  <div
+                    sx={{
+                      textAlign: "center",
+                      width: "2rem",
+                      height: "2rem",
+                    }}
+                  >
+                    {i + 1}
+                  </div>
+                </Link>
+              ))}
+            {!isLast && (
+              <Link to={nextPage} rel="next" sx={{ textAlign: "right" }}>
+                <span sx={{ mx: "0.5rem" }}>Next Page</span>
+                <FontAwesomeIcon icon={faArrowRight} size={"lg"} />
+              </Link>
+            )}
+          </div>
         </div>
         <aside>
           <TagsList />

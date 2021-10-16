@@ -17,8 +17,8 @@ const IndexPage = ({ data }) => {
         src={GJack}
         alt={"Gabi Jack"}
         sx={{
-          width: 200,
-          height: 200,
+          width: 300,
+          height: 300,
           borderRadius: "50%",
           border: "1px solid lightgrey",
           padding: "5px",
