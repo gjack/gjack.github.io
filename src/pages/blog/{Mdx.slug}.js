@@ -10,6 +10,7 @@ import {
   faArrowLeft,
   faArrowRight,
   faTag,
+  faFolderOpen,
 } from "@fortawesome/free-solid-svg-icons"
 import { faClock, faCalendarAlt } from "@fortawesome/free-regular-svg-icons"
 import { kebabCase } from "lodash"
@@ -51,6 +52,19 @@ const BlogPostPage = ({ data }) => {
                 <span sx={{ mx: "0.5rem" }}>{`${post.timeToRead} ${
                   post.timeToRead === 1 ? "minute read" : "minutes read"
                 }`}</span>
+              </small>
+              <small>
+                <span>
+                  {post.frontmatter.categories.map((category, idx) => (
+                    <Link
+                      to={`/categories/${kebabCase(category)}/`}
+                      key={`${category}-${idx}`}
+                    >
+                      <FontAwesomeIcon icon={faFolderOpen} />
+                      <span sx={{ mx: "0.3rem" }}>{category}</span>
+                    </Link>
+                  ))}
+                </span>
               </small>
               <small>
                 <span>
@@ -122,6 +136,7 @@ export const query = graphql`
       frontmatter {
         title
         tags
+        categories
         date(formatString: "MMMM DD, YYYY")
         image {
           childImageSharp {
