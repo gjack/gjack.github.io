@@ -124,6 +124,7 @@ export const pageQuery = graphql`
   query blogPageQuery($skip: Int!, $limit: Int!) {
     allMdx(
       sort: { fields: [frontmatter___date], order: DESC }
+      filter: { frontmatter: { draft: { eq: false } } }
       limit: $limit
       skip: $skip
     ) {

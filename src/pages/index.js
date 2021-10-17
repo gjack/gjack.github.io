@@ -103,7 +103,11 @@ const IndexPage = ({ data }) => {
 
 export const pageQuery = graphql`
   {
-    allMdx(limit: 3, sort: { fields: [frontmatter___date], order: DESC }) {
+    allMdx(
+      limit: 3
+      sort: { fields: [frontmatter___date], order: DESC }
+      filter: { frontmatter: { draft: { eq: false } } }
+    ) {
       nodes {
         id
         slug
