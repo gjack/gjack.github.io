@@ -12,7 +12,7 @@ export default {
         minHeight: "5rem",
         p: "1rem 4rem",
         position: "relative",
-        backgroundColor: "lightblue",
+        backgroundColor: "#8db6d9",
         ":before": {
           position: "absolute",
           height: "3rem",

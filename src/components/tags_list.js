@@ -2,6 +2,8 @@
 import { jsx, Grid, Box } from "theme-ui"
 import { useStaticQuery, graphql, Link } from "gatsby"
 import { kebabCase } from "lodash"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faTags } from "@fortawesome/free-solid-svg-icons"
 
 const TagsList = () => {
   const { allMdx } = useStaticQuery(graphql`
@@ -17,14 +19,24 @@ const TagsList = () => {
   const tags = allMdx.group
 
   return (
-    <div>
-      <h3>Categories</h3>
+    <Box
+      sx={{
+        backgroundColor: "#bcd9ec",
+        p: "1rem",
+        borderRadius: "0.5rem",
+        my: "2rem",
+      }}
+    >
+      <h3>
+        <FontAwesomeIcon icon={faTags} size={"lg"} sx={{ mx: "0.5rem" }} />
+        Tags
+      </h3>
       <ul
         sx={{
           listStyle: "none",
           m: 0,
-          px: 3,
-          py: 4,
+          px: 2,
+          py: 3,
         }}
       >
         <Grid gap={3} columns={[2, null, 2]}>
@@ -34,16 +46,13 @@ const TagsList = () => {
               sx={{
                 textAlign: "center",
                 padding: "0",
-                backgroundColor: "rgba(243, 244, 246, 0.9)",
-                borderRadius: "12px",
-                boxShadow: "0px 9px 9px 1px rgb(0 0 70 / 20%)",
-                border: "1px solid rgba(243, 244, 246, 1)",
               }}
             >
               <li key={tag.fieldValue}>
                 <Link
                   to={`/tags/${kebabCase(tag.fieldValue)}/`}
                   key={tag.fieldValue}
+                  sx={{ textDecoration: "none" }}
                 >
                   {tag.fieldValue}
                 </Link>
@@ -52,7 +61,7 @@ const TagsList = () => {
           ))}
         </Grid>
       </ul>
-    </div>
+    </Box>
   )
 }
 

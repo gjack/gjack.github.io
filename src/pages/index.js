@@ -70,26 +70,29 @@ const IndexPage = ({ data }) => {
         }}
       />
       <h3>Most recent posts</h3>
-      <Grid
-        gap={4}
-        columns={[1, null, 3]}
-        repeat={"fit"}
-        sx={{ marginBottom: 5 }}
-      >
+      <Grid gap={4} columns={[1, 1, 3]} repeat={"fit"} sx={{ marginBottom: 5 }}>
         {posts.map((post, index) => (
           <Box
             key={`post-${post.slug}-${index}`}
             sx={{
               textAlign: "justify",
               padding: "1.25rem",
-              backgroundColor: "rgba(243, 244, 246, 0.9)",
-              borderRadius: "5%",
+              backgroundColor: "#bcd9ec",
+              borderRadius: "0.5rem",
               boxShadow: "0px 9px 9px 1px rgb(0 0 70 / 20%)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-around",
             }}
           >
-            <Link to={`/blog/${post.slug}`} key={post.slug}>
-              <h3>{post.frontmatter.title}</h3>
-              <div>{post.excerpt}</div>
+            <h3>{post.frontmatter.title}</h3>
+            <div>{post.excerpt}</div>
+            <Link
+              to={`/blog/${post.slug}`}
+              key={post.slug}
+              sx={{ textAlign: "right", textDecoration: "none" }}
+            >
+              Continue reading
             </Link>
           </Box>
         ))}

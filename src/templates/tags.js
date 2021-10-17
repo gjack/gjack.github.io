@@ -5,6 +5,8 @@ import SEO from "../components/seo"
 import { graphql, Link } from "gatsby"
 import { Themed } from "@theme-ui/mdx"
 import TagsList from "../components/tags_list"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faClock, faCalendarAlt } from "@fortawesome/free-regular-svg-icons"
 
 // Components
 
@@ -29,7 +31,7 @@ const Tags = ({ pageContext, data }) => {
         }}
       >
         <div sx={{ textAlign: "justify" }}>
-          <Themed.h2 sx={{ px: 3 }}>{`Posts in category ${tag}`}</Themed.h2>
+          <Themed.h2 sx={{ px: 3 }}>{`Posts tagged as ${tag}`}</Themed.h2>
           <ul
             sx={{
               listStyle: "none",
@@ -65,9 +67,18 @@ const Tags = ({ pageContext, data }) => {
                     {node.frontmatter.title}
                   </Link>
                 </Themed.h3>
-                <small sx={{ fontWeight: "bold" }}>
-                  {node.frontmatter.date}
-                </small>
+                <div sx={{ display: "flex", flexDirection: "column" }}>
+                  <small sx={{ fontWeight: "bold" }}>
+                    <FontAwesomeIcon icon={faCalendarAlt} />
+                    <span sx={{ mx: "0.5rem" }}>{node.frontmatter.date}</span>
+                  </small>
+                  <small>
+                    <FontAwesomeIcon icon={faClock} />
+                    <span sx={{ mx: "0.5rem" }}>{`${node.timeToRead} ${
+                      node.timeToRead === 1 ? "minute" : "minutes"
+                    }`}</span>
+                  </small>
+                </div>
                 <Themed.p>{node.excerpt}</Themed.p>
               </li>
             ))}
@@ -99,6 +110,7 @@ export const pageQuery = graphql`
             title
             date(formatString: "DD MMMM, YYYY")
           }
+          timeToRead
           excerpt(truncate: true, pruneLength: 150)
         }
       }
