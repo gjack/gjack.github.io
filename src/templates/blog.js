@@ -5,6 +5,7 @@ import SEO from "../components/seo"
 import { graphql, Link } from "gatsby"
 import { Themed } from "@theme-ui/mdx"
 import TagsList from "../components/tags_list"
+import CategoriesList from "../components/categories_list"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faClock, faCalendarAlt } from "@fortawesome/free-regular-svg-icons"
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"
@@ -113,6 +114,7 @@ const Blog = ({ pageContext, data }) => {
           </div>
         </div>
         <aside>
+          <CategoriesList />
           <TagsList />
         </aside>
       </main>

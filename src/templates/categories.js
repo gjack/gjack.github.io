@@ -4,18 +4,18 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { graphql, Link } from "gatsby"
 import { Themed } from "@theme-ui/mdx"
-import TagsList from "../components/tags_list"
 import CategoriesList from "../components/categories_list"
+import TagsList from "../components/tags_list"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faClock, faCalendarAlt } from "@fortawesome/free-regular-svg-icons"
 
 // Components
 
-const Tags = ({ pageContext, data }) => {
-  const { tag } = pageContext
+const Categories = ({ pageContext, data }) => {
+  const { category } = pageContext
   const { edges, totalCount } = data.allMdx
 
-  const pageTitle = `Tag:${tag}`
+  const pageTitle = `Category:${category}`
 
   return (
     <Layout>
@@ -28,7 +28,9 @@ const Tags = ({ pageContext, data }) => {
         }}
       >
         <div sx={{ textAlign: "justify" }}>
-          <Themed.h2 sx={{ px: 3 }}>{`Posts tagged as ${tag}`}</Themed.h2>
+          <Themed.h2
+            sx={{ px: 3 }}
+          >{`Posts in category ${category}`}</Themed.h2>
           <ul
             sx={{
               listStyle: "none",
@@ -90,14 +92,16 @@ const Tags = ({ pageContext, data }) => {
   )
 }
 
-export default Tags
+export default Categories
 
 export const pageQuery = graphql`
-  query ($tag: String) {
+  query ($category: String) {
     allMdx(
       limit: 2000
       sort: { fields: [frontmatter___date], order: DESC }
-      filter: { frontmatter: { draft: { eq: false }, tags: { in: [$tag] } } }
+      filter: {
+        frontmatter: { draft: { eq: false }, categories: { in: [$category] } }
+      }
     ) {
       totalCount
       edges {

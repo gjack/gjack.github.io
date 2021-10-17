@@ -5,6 +5,7 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   const { createPage } = actions
 
   const tagTemplate = path.resolve("src/templates/tags.js")
+  const categoryTemplate = path.resolve("src/templates/categories.js")
   const result = await graphql(`
     {
       allMdx(sort: { fields: [frontmatter___date], order: DESC }, limit: 1000) {
@@ -16,6 +17,11 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
       }
       tagsGroup: allMdx(limit: 2000) {
         group(field: frontmatter___tags) {
+          fieldValue
+        }
+      }
+      categoriesGroup: allMdx(limit: 2000) {
+        group(field: frontmatter___categories) {
           fieldValue
         }
       }
@@ -36,6 +42,19 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
       component: tagTemplate,
       context: {
         tag: tag.fieldValue,
+      },
+    })
+  })
+
+  // Extract category data from query
+  const categories = result.data.categoriesGroup.group
+  // Make tag pages
+  categories.forEach((category) => {
+    createPage({
+      path: `/categories/${_.kebabCase(category.fieldValue)}/`,
+      component: categoryTemplate,
+      context: {
+        category: category.fieldValue,
       },
     })
   })
