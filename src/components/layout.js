@@ -1,11 +1,13 @@
 /** @jsx jsx */
-import { jsx } from "theme-ui"
+import { jsx, MenuButton } from "theme-ui"
 import { Link } from "gatsby"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faGithubSquare,
   faTwitterSquare,
 } from "@fortawesome/free-brands-svg-icons"
+import { useState } from "react"
+import MediaQuery from "react-responsive"
 
 const bodyStyles = {
   display: "flex",
@@ -63,32 +65,146 @@ const navLinkStyles = {
   fontWeight: "bold",
 }
 
+const mobileNavStyles = {
+  maxWidth: "container",
+  mx: "auto",
+  px: 3,
+  display: "flex",
+  alignItems: "baseline",
+  color: "#7a8288",
+}
+
 const Layout = ({ children }) => {
+  const [showMenu, setShowMenu] = useState(false)
+
+  const toggleShowMenu = () => {
+    setShowMenu(!showMenu)
+  }
+
   return (
     <div sx={bodyStyles}>
       <header sx={headerStyles}>
-        <nav sx={navStyles}>
-          <h1 sx={navLinkStyles}>Gabi Jack's Blog</h1>
-          <div sx={{ mx: "auto" }} />
-          <Link
-            sx={{ ...navLinkStyles, ":hover": { color: "#54585c" } }}
-            to="/"
-          >
-            Home
-          </Link>
-          <Link
-            sx={{ ...navLinkStyles, ":hover": { color: "#54585c" } }}
-            to="/blog"
-          >
-            Blog
-          </Link>
-          <Link
-            sx={{ ...navLinkStyles, ":hover": { color: "#54585c" } }}
-            to="/"
-          >
-            Reading
-          </Link>
-        </nav>
+        <MediaQuery minWidth={"40em"}>
+          <nav sx={navStyles}>
+            <h1 sx={navLinkStyles}>Gabi Jack's Blog</h1>
+            <div sx={{ mx: "auto" }} />
+            <Link
+              sx={{ ...navLinkStyles, ":hover": { color: "#54585c" } }}
+              to="/"
+            >
+              Home
+            </Link>
+            <Link
+              sx={{ ...navLinkStyles, ":hover": { color: "#54585c" } }}
+              to="/blog"
+            >
+              Blog
+            </Link>
+            <Link
+              sx={{ ...navLinkStyles, ":hover": { color: "#54585c" } }}
+              to="/"
+            >
+              Reading
+            </Link>
+          </nav>
+        </MediaQuery>
+        <MediaQuery maxWidth={"40em"}>
+          <nav sx={mobileNavStyles}>
+            <h1 sx={navLinkStyles}>Gabi Jack's Blog</h1>
+            <div sx={{ mx: "auto" }} />
+            <MenuButton
+              aria-label="Toggle Menu"
+              sx={{ ":active": { border: "1px solid lightgrey" } }}
+              onClick={toggleShowMenu}
+            />
+            <ul
+              sx={{
+                display: showMenu ? "block" : "none",
+                minWidth: "6rem",
+                position: "absolute",
+                top: "110%",
+                right: "15px",
+                marginTop: 0,
+                p: "5px",
+                border: "1px solid #f2f3f3",
+                borderRadius: "4px",
+                background: "#fff",
+                boxShadow:
+                  "0 2px 4px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%)",
+                ":before": {
+                  content: '" "',
+                  position: "absolute",
+                  top: "-10px",
+                  right: "10px",
+                  width: 0,
+                  borderStyle: "solid",
+                  borderWidth: "0 10px 10px",
+                  borderColor: "#fff transparent",
+                  display: "block",
+                  zIndex: 0,
+                },
+              }}
+            >
+              <li
+                sx={{
+                  display: "block",
+                  borderBottom: "1px solid #f2f3f3",
+                  px: "2rem",
+                }}
+              >
+                <Link
+                  key="mobile-nav-1"
+                  sx={{
+                    variant: "styles.navlink",
+                    py: 2,
+                    textDecoration: "none",
+                    color: "inherit",
+                    fontWeight: "bold",
+                  }}
+                  to="/"
+                >
+                  Home
+                </Link>
+              </li>
+              <li
+                sx={{
+                  display: "block",
+                  borderBottom: "1px solid #f2f3f3",
+                  px: "2rem",
+                }}
+              >
+                <Link
+                  key="mobile-nav-2"
+                  sx={{
+                    variant: "styles.navlink",
+                    py: 2,
+                    textDecoration: "none",
+                    color: "inherit",
+                    fontWeight: "bold",
+                  }}
+                  to="/blog"
+                >
+                  Blog
+                </Link>
+              </li>
+              <li sx={{ display: "block", px: "2rem" }}>
+                <Link
+                  key="mobile-nav-3"
+                  sx={{
+                    variant: "styles.navlink",
+                    py: 2,
+                    textDecoration: "none",
+                    color: "inherit",
+                    fontWeight: "bold",
+                  }}
+                  to="/"
+                >
+                  Reading
+                </Link>
+              </li>
+            </ul>
+          </nav>
+        </MediaQuery>
       </header>
       <main sx={mainStyles}>{children}</main>
       <footer sx={footerStyles}>

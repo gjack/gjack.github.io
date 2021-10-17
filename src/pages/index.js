@@ -17,8 +17,8 @@ const IndexPage = ({ data }) => {
         src={GJack}
         alt={"Gabi Jack"}
         sx={{
-          width: 300,
-          height: 300,
+          width: [200, 300, null],
+          height: [200, 300, null],
           borderRadius: "50%",
           border: "1px solid lightgrey",
           padding: "5px",
@@ -57,7 +57,6 @@ const IndexPage = ({ data }) => {
           width: "90%",
           border: "none",
           borderTop: "3px double lightgrey",
-          color: "lightgrey",
           overflow: "visible",
           height: "5px",
           my: 5,
@@ -77,8 +76,9 @@ const IndexPage = ({ data }) => {
         repeat={"fit"}
         sx={{ marginBottom: 5 }}
       >
-        {posts.map((post) => (
+        {posts.map((post, index) => (
           <Box
+            key={`post-${post.slug}-${index}`}
             sx={{
               textAlign: "justify",
               padding: "1.25rem",
