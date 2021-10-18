@@ -13,7 +13,7 @@ import { faClock, faCalendarAlt } from "@fortawesome/free-regular-svg-icons"
 
 const Categories = ({ pageContext, data }) => {
   const { category } = pageContext
-  const { edges, totalCount } = data.allMdx
+  const { edges } = data.allMdx
 
   const pageTitle = `Category:${category}`
 
