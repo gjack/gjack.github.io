@@ -1,0 +1,31 @@
+[
+  {
+    "year": "2020",
+    "books": [
+      {
+        "title": "Code Your Way Up, Rise to the Challenge of Software Leadership",
+        "link": "https://www.amazon.com/dp/1777076501",
+        "author": "Greg Thomas",
+        "year": "2020"
+      },
+      {
+        "title": "Forge Your Future With Open Source",
+        "link": "https://pragprog.com/titles/vbopens/forge-your-future-with-open-source/",
+        "author": "VM (Vicky) Brasseur",
+        "year": "2020"
+      },
+      {
+        "title": "You're Worth It!, Navigating your career in corporate America",
+        "link": "https://www.amazon.com/Youre-Worth-Navigating-Corporate-America/dp/1098315030/ref=sr_1_2?crid=2FWD2YY1NQF6J&dchild=1&keywords=you%27re+worth+it&qid=1613340109&sprefix=you%27re+wor%2Caps%2C170&sr=8-2",
+        "author": "Ha-Keem Abdel-Khaliq",
+        "year": "2020"
+      },
+      {
+        "title": "Build Websites with Hugo",
+        "link": "https://pragprog.com/titles/bhhugo/build-websites-with-hugo/",
+        "author": "Brian P. Hogan",
+        "year": "2020"
+      }
+    ]
+  }
+]

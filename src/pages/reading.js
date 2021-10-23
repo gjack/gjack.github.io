@@ -1,10 +1,12 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui"
+import React from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { Link } from "gatsby"
 import { Image } from "theme-ui"
 import Books from "../images/books.jpg"
+import JSONdata from "../../content/books.json"
 
 // markup
 const ReadingPage = () => {
@@ -57,74 +59,44 @@ const ReadingPage = () => {
         }}
       />
       <h3>Recently read books</h3>
-      <h4 sx={{ textAlign: "left", fontWeight: "bold" }}>2020</h4>
-      <ul
-        sx={{
-          listStyle: "none",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          textAlign: "left",
-          m: 0,
-          px: 3,
-          py: 4,
-        }}
-      >
-        <li key="books-01" sx={{ marginBottom: "2rem" }}>
-          <span>
-            <Link
-              key="books-01"
-              sx={{
-                color: "#328cc1",
-                textDecoration: "none",
-                ":hover,:focus": {
-                  color: "#d9b310",
-                },
-              }}
-              to="https://www.amazon.com/dp/1777076501"
-            >
-              Code Your Way Up, Rise to the Challenge of Software Leadership
-            </Link>
-          </span>
-          <span> by Greg Thomas</span>
-        </li>
-        <li key="books-02" sx={{ marginBottom: "2rem" }}>
-          <span>
-            <Link
-              key="books-02"
-              sx={{
-                color: "#328cc1",
-                textDecoration: "none",
-                ":hover,:focus": {
-                  color: "#d9b310",
-                },
-              }}
-              to="https://pragprog.com/titles/vbopens/forge-your-future-with-open-source/"
-            >
-              Forge Your Future With Open Source
-            </Link>
-          </span>
-          <span> by VM (Vicky) Brasseur</span>
-        </li>
-        <li key="books-03" sx={{ marginBottom: "2rem" }}>
-          <span>
-            <Link
-              key="books-03"
-              sx={{
-                color: "#328cc1",
-                textDecoration: "none",
-                ":hover,:focus": {
-                  color: "#d9b310",
-                },
-              }}
-              to="https://www.amazon.com/Youre-Worth-Navigating-Corporate-America/dp/1098315030/ref=sr_1_2?crid=2FWD2YY1NQF6J&dchild=1&keywords=you%27re+worth+it&qid=1613340109&sprefix=you%27re+wor%2Caps%2C170&sr=8-2"
-            >
-              You're Worth It!, Navigating your career in corporate America
-            </Link>
-          </span>
-          <span> by Ha-Keem Abdel-Khaliq</span>
-        </li>
-      </ul>
+      {JSONdata.map((group) => (
+        <>
+          <h4 sx={{ textAlign: "left", fontWeight: "bold" }}>{group.year}</h4>
+          <ul
+            sx={{
+              listStyle: "none",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "flex-start",
+              textAlign: "left",
+              m: 0,
+              px: 3,
+              py: 4,
+            }}
+          >
+            {group.books.map((book, index) => (
+              <li key={`books-${index}`} sx={{ marginBottom: "2rem" }}>
+                <span>
+                  <Link
+                    key={`books-${index}`}
+                    sx={{
+                      color: "#328cc1",
+                      textDecoration: "none",
+                      ":hover,:focus": {
+                        color: "#d9b310",
+                      },
+                    }}
+                    to={book.link}
+                  >
+                    {book.title}
+                  </Link>
+                </span>
+                <span>{` by ${book.author}`}</span>
+              </li>
+            ))}
+          </ul>
+        </>
+      ))}
     </Layout>
   )
 }
