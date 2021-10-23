@@ -87,6 +87,7 @@ const ReadingPage = () => {
                       },
                     }}
                     to={book.link}
+                    target="_blank"
                   >
                     {book.title}
                   </Link>
