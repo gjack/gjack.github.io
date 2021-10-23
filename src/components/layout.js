@@ -106,7 +106,7 @@ const Layout = ({ children }) => {
             </Link>
             <Link
               sx={{ ...navLinkStyles, ":hover": { color: "#d9b310" } }}
-              to="/"
+              to="/reading"
             >
               Reading
             </Link>
@@ -201,7 +201,7 @@ const Layout = ({ children }) => {
                     color: "#1d2731",
                     fontWeight: "bold",
                   }}
-                  to="/"
+                  to="/reading"
                 >
                   Reading
                 </Link>
