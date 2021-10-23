@@ -10,9 +10,11 @@ export default {
       sx={{
         width: "80%",
         minHeight: "5rem",
-        p: "1rem 4rem",
         position: "relative",
-        backgroundColor: "#8db6d9",
+        border: "5px solid #328cc1",
+        backgroundColor: "rgb(50 140 193/40%)",
+        margin: "2rem auto",
+        color: "#0b3c5d",
         ":before": {
           position: "absolute",
           height: "3rem",
@@ -35,6 +37,11 @@ export default {
           marginTop: "1rem",
           textStyle: "italic",
           textAlign: "right",
+        },
+        p: {
+          color: "#0b3c5d",
+          p: "0 4rem",
+          textAlign: "left",
         },
       }}
     >

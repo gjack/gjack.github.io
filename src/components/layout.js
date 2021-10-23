@@ -13,6 +13,8 @@ const bodyStyles = {
   display: "flex",
   flexDirection: "column",
   minHeight: "100vh",
+  color: "#1d2731",
+  backgroundColor: "#eaeaec",
 }
 
 const headerStyles = {
@@ -22,8 +24,8 @@ const headerStyles = {
   position: "sticky",
   top: 0,
   zIndex: "1000",
-  backgroundColor: "white",
-  borderBottom: "1px solid lightgrey",
+  backgroundColor: "#0b3c5d",
+  borderBottom: "1px solid black",
   boxShadow: "0px 7px 9px 1px rgb(0 0 70 / 20%)",
 }
 
@@ -53,7 +55,8 @@ const navStyles = {
   px: 3,
   display: "flex",
   alignItems: "baseline",
-  color: "#7a8288",
+  // color: "#7a8288",
+  color: "#eaeaec",
 }
 
 const navLinkStyles = {
@@ -71,7 +74,8 @@ const mobileNavStyles = {
   px: 3,
   display: "flex",
   alignItems: "baseline",
-  color: "#7a8288",
+  // color: "#7a8288",
+  color: "#eaeaec",
 }
 
 const Layout = ({ children }) => {
@@ -89,19 +93,19 @@ const Layout = ({ children }) => {
             <h1 sx={navLinkStyles}>Gabi Jack's Blog</h1>
             <div sx={{ mx: "auto" }} />
             <Link
-              sx={{ ...navLinkStyles, ":hover": { color: "#54585c" } }}
+              sx={{ ...navLinkStyles, ":hover": { color: "#d9b310" } }}
               to="/"
             >
               Home
             </Link>
             <Link
-              sx={{ ...navLinkStyles, ":hover": { color: "#54585c" } }}
+              sx={{ ...navLinkStyles, ":hover": { color: "#d9b310" } }}
               to="/blog"
             >
               Blog
             </Link>
             <Link
-              sx={{ ...navLinkStyles, ":hover": { color: "#54585c" } }}
+              sx={{ ...navLinkStyles, ":hover": { color: "#d9b310" } }}
               to="/"
             >
               Reading
@@ -158,7 +162,7 @@ const Layout = ({ children }) => {
                     variant: "styles.navlink",
                     py: 2,
                     textDecoration: "none",
-                    color: "inherit",
+                    color: "#12731",
                     fontWeight: "bold",
                   }}
                   to="/"
@@ -179,7 +183,7 @@ const Layout = ({ children }) => {
                     variant: "styles.navlink",
                     py: 2,
                     textDecoration: "none",
-                    color: "inherit",
+                    color: "#1d2731",
                     fontWeight: "bold",
                   }}
                   to="/blog"
@@ -194,7 +198,7 @@ const Layout = ({ children }) => {
                     variant: "styles.navlink",
                     py: 2,
                     textDecoration: "none",
-                    color: "inherit",
+                    color: "#1d2731",
                     fontWeight: "bold",
                   }}
                   to="/"

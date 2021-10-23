@@ -21,7 +21,7 @@ const TagsList = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#bcd9ec",
+        backgroundColor: "#328cc1",
         p: "1rem",
         borderRadius: "0.5rem",
         my: "2rem",
@@ -52,7 +52,12 @@ const TagsList = () => {
                 <Link
                   to={`/tags/${kebabCase(tag.fieldValue)}/`}
                   key={tag.fieldValue}
-                  sx={{ textDecoration: "none" }}
+                  sx={{
+                    textDecoration: "none",
+                    fontWeight: "bold",
+                    ":visited": { color: "#1d2731" },
+                    ":hover": { color: "#d9b310" },
+                  }}
                 >
                   {tag.fieldValue}
                 </Link>

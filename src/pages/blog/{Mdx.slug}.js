@@ -59,6 +59,13 @@ const BlogPostPage = ({ data }) => {
                     <Link
                       to={`/categories/${kebabCase(category)}/`}
                       key={`${category}-${idx}`}
+                      sx={{
+                        color: "#0b3c5d",
+                        textDecoration: "none",
+                        ":hover": {
+                          color: "#d9b310",
+                        },
+                      }}
                     >
                       <FontAwesomeIcon icon={faFolderOpen} />
                       <span sx={{ mx: "0.3rem" }}>{category}</span>
@@ -69,7 +76,17 @@ const BlogPostPage = ({ data }) => {
               <small>
                 <span>
                   {post.frontmatter.tags.map((tag, idx) => (
-                    <Link to={`/tags/${kebabCase(tag)}/`} key={`${tag}-${idx}`}>
+                    <Link
+                      to={`/tags/${kebabCase(tag)}/`}
+                      key={`${tag}-${idx}`}
+                      sx={{
+                        color: "#0b3c5d",
+                        textDecoration: "none",
+                        ":hover": {
+                          color: "#d9b310",
+                        },
+                      }}
+                    >
                       <FontAwesomeIcon icon={faTag} />
                       <span sx={{ mx: "0.3rem" }}>{tag}</span>
                     </Link>
@@ -89,6 +106,14 @@ const BlogPostPage = ({ data }) => {
               <Link
                 sx={{ textAlign: "left" }}
                 to={`/blog/${edge.previous.slug}`}
+                sx={{
+                  color: "#0b3c5d",
+                  fontWeight: "bold",
+                  textDecoration: "none",
+                  ":hover": {
+                    color: "#d9b310",
+                  },
+                }}
               >
                 <div sx={{ display: "flex", flexDirection: "row" }}>
                   <FontAwesomeIcon icon={faArrowLeft} size={"lg"} />
@@ -107,7 +132,18 @@ const BlogPostPage = ({ data }) => {
             )}
             <div sx={{ mx: "auto" }} />
             {edge.next && (
-              <Link sx={{ textAlign: "right" }} to={`/blog/${edge.next.slug}`}>
+              <Link
+                sx={{ textAlign: "right" }}
+                to={`/blog/${edge.next.slug}`}
+                sx={{
+                  color: "#0b3c5d",
+                  fontWeight: "bold",
+                  textDecoration: "none",
+                  ":hover": {
+                    color: "#d9b310",
+                  },
+                }}
+              >
                 <div sx={{ display: "flex", flexDirection: "row" }}>
                   <div
                     sx={{

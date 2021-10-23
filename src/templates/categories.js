@@ -58,8 +58,7 @@ const Categories = ({ pageContext, data }) => {
                       color: "inherit",
                       textDecoration: "none",
                       ":hover,:focus": {
-                        color: "primary",
-                        textDecoration: "underline",
+                        color: "#d9b310",
                       },
                     }}
                   >

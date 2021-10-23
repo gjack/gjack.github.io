@@ -57,8 +57,7 @@ const Blog = ({ pageContext, data }) => {
                       color: "inherit",
                       textDecoration: "none",
                       ":hover,:focus": {
-                        color: "primary",
-                        textDecoration: "underline",
+                        color: "#d9b310",
                       },
                     }}
                   >
@@ -83,7 +82,22 @@ const Blog = ({ pageContext, data }) => {
           </ul>
           <div sx={{ display: "flex", flexDirection: "row" }}>
             {!isFirst && (
-              <Link to={prevPage} rel="prev" sx={{ textAlign: "left" }}>
+              <Link
+                to={prevPage}
+                rel="prev"
+                sx={{
+                  textAlign: "left",
+                  color: "#0b3c5d",
+                  fontWeight: "bold",
+                  textDecoration: "none",
+                  ":visited": {
+                    color: "#0b3c5d",
+                  },
+                  ":hover": {
+                    color: "#d9b310",
+                  },
+                }}
+              >
                 <FontAwesomeIcon icon={faArrowLeft} size={"lg"} />
                 <span sx={{ mx: "0.5rem" }}>Previous Page</span>
               </Link>
@@ -93,12 +107,23 @@ const Blog = ({ pageContext, data }) => {
                 <Link
                   key={`pagination-number${i + 1}`}
                   to={`/blog/${i === 0 ? "" : i + 1}`}
+                  sx={{
+                    textDecoration: "none",
+                    color: "#0b3c5d",
+                    ":visited": {
+                      color: "#0b3c5d",
+                    },
+                    ":hover": {
+                      color: "#d9b310",
+                    },
+                  }}
                 >
                   <div
                     sx={{
                       textAlign: "center",
                       width: "2rem",
                       height: "2rem",
+                      fontWeight: "bold",
                     }}
                   >
                     {i + 1}
@@ -106,7 +131,22 @@ const Blog = ({ pageContext, data }) => {
                 </Link>
               ))}
             {!isLast && (
-              <Link to={nextPage} rel="next" sx={{ textAlign: "right" }}>
+              <Link
+                to={nextPage}
+                rel="next"
+                sx={{
+                  textAlign: "right",
+                  color: "#0b3c5d",
+                  fontWeight: "bold",
+                  textDecoration: "none",
+                  ":visited": {
+                    color: "#0b3c5d",
+                  },
+                  ":hover": {
+                    color: "#d9b310",
+                  },
+                }}
+              >
                 <span sx={{ mx: "0.5rem" }}>Next Page</span>
                 <FontAwesomeIcon icon={faArrowRight} size={"lg"} />
               </Link>

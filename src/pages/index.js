@@ -20,7 +20,7 @@ const IndexPage = ({ data }) => {
           width: [200, 300, null],
           height: [200, 300, null],
           borderRadius: "50%",
-          border: "1px solid lightgrey",
+          border: "1px solid #0b3c5d",
           padding: "5px",
           marginTop: "3rem",
         }}
@@ -52,16 +52,16 @@ const IndexPage = ({ data }) => {
       </article>
       <hr
         sx={{
-          color: "lightgrey",
+          color: "#0b3c5d",
           textAlign: "center",
           width: "90%",
           border: "none",
-          borderTop: "3px double lightgrey",
+          borderTop: "3px double #0b3c5d",
           overflow: "visible",
           height: "5px",
           my: 5,
           ":after": {
-            background: "#fff",
+            background: "#eaeaec",
             content: '"\\270E"',
             padding: "0 4px",
             position: "relative",
@@ -77,20 +77,28 @@ const IndexPage = ({ data }) => {
             sx={{
               textAlign: "justify",
               padding: "1.25rem",
-              backgroundColor: "#bcd9ec",
+              backgroundColor: "#328cc1",
               borderRadius: "0.5rem",
               boxShadow: "0px 9px 9px 1px rgb(0 0 70 / 20%)",
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-around",
+              fontWeight: "bold",
             }}
           >
-            <h3>{post.frontmatter.title}</h3>
+            <h3 sx={{ textAlign: "center" }}>{post.frontmatter.title}</h3>
             <div>{post.excerpt}</div>
             <Link
               to={`/blog/${post.slug}`}
               key={post.slug}
-              sx={{ textAlign: "right", textDecoration: "none" }}
+              sx={{
+                textAlign: "right",
+                textDecoration: "none",
+                color: "#1d2731",
+                ":hover": {
+                  color: "#d9b310",
+                },
+              }}
             >
               Continue reading
             </Link>
