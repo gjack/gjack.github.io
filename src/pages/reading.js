@@ -64,17 +64,18 @@ const ReadingPage = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "flex-start",
+          textAlign: "left",
           m: 0,
           px: 3,
           py: 4,
         }}
       >
-        <li key="books-01">
+        <li key="books-01" sx={{ marginBottom: "2rem" }}>
           <span>
             <Link
               key="books-01"
               sx={{
-                color: "inherit",
+                color: "#328cc1",
                 textDecoration: "none",
                 ":hover,:focus": {
                   color: "#d9b310",
@@ -87,12 +88,12 @@ const ReadingPage = () => {
           </span>
           <span> by Greg Thomas</span>
         </li>
-        <li key="books-01">
+        <li key="books-02" sx={{ marginBottom: "2rem" }}>
           <span>
             <Link
-              key="books-01"
+              key="books-02"
               sx={{
-                color: "inherit",
+                color: "#328cc1",
                 textDecoration: "none",
                 ":hover,:focus": {
                   color: "#d9b310",
@@ -105,12 +106,12 @@ const ReadingPage = () => {
           </span>
           <span> by VM (Vicky) Brasseur</span>
         </li>
-        <li key="books-01">
+        <li key="books-03" sx={{ marginBottom: "2rem" }}>
           <span>
             <Link
-              key="books-01"
+              key="books-03"
               sx={{
-                color: "inherit",
+                color: "#328cc1",
                 textDecoration: "none",
                 ":hover,:focus": {
                   color: "#d9b310",

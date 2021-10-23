@@ -55,7 +55,6 @@ const navStyles = {
   px: 3,
   display: "flex",
   alignItems: "baseline",
-  // color: "#7a8288",
   color: "#eaeaec",
 }
 
@@ -74,7 +73,6 @@ const mobileNavStyles = {
   px: 3,
   display: "flex",
   alignItems: "baseline",
-  // color: "#7a8288",
   color: "#eaeaec",
 }
 
@@ -162,8 +160,9 @@ const Layout = ({ children }) => {
                     variant: "styles.navlink",
                     py: 2,
                     textDecoration: "none",
-                    color: "#12731",
+                    color: "#1d2731",
                     fontWeight: "bold",
+                    ":visited": { color: "#1d2731" },
                   }}
                   to="/"
                 >
@@ -185,6 +184,7 @@ const Layout = ({ children }) => {
                     textDecoration: "none",
                     color: "#1d2731",
                     fontWeight: "bold",
+                    ":visited": { color: "#1d2731" },
                   }}
                   to="/blog"
                 >
@@ -200,6 +200,7 @@ const Layout = ({ children }) => {
                     textDecoration: "none",
                     color: "#1d2731",
                     fontWeight: "bold",
+                    ":visited": { color: "#1d2731" },
                   }}
                   to="/reading"
                 >
