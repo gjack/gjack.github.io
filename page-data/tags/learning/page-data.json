@@ -1,0 +1,5 @@
+{
+    "componentChunkName": "component---src-templates-tags-js",
+    "path": "/tags/learning/",
+    "result": {"data":{"allMdx":{"totalCount":0,"edges":[]}},"pageContext":{"tag":"learning"}},
+    "staticQueryHashes": ["197069131","2201243204","2427728686","2744905544"]}

@@ -1,0 +1,5 @@
+{
+    "componentChunkName": "component---src-templates-tags-js",
+    "path": "/tags/rails/",
+    "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"6cedd72c-880d-5cac-925f-c374d6b512c7","slug":"2015-06-14-in-search-of-a-faster-query","frontmatter":{"title":"In search of a faster query","date":"14 June, 2015"},"timeToRead":1,"excerpt":"Recently, as I was fixing a minor bug in one of our applications at work, I had the opportunity to witness what a great difference a simple query can…"}}]}},"pageContext":{"tag":"Rails"}},
+    "staticQueryHashes": ["197069131","2201243204","2427728686","2744905544"]}

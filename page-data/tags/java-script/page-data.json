@@ -1,0 +1,5 @@
+{
+    "componentChunkName": "component---src-templates-tags-js",
+    "path": "/tags/java-script/",
+    "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"391253e6-5f50-5691-b586-1d430f8beb54","slug":"2016-12-24-working-with-d3-based-chart-library/","frontmatter":{"title":"TIL: Working with a D3 based chart library","date":"24 December, 2016"},"timeToRead":1,"excerpt":"One of the things I love about my job is that I get to explore different aspects of web development, including all sorts of interesting libraries tha…"}}]}},"pageContext":{"tag":"JavaScript"}},
+    "staticQueryHashes": ["197069131","2201243204","2427728686","2744905544"]}

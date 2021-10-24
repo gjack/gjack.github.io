@@ -1,0 +1,5 @@
+{
+    "componentChunkName": "component---src-templates-categories-js",
+    "path": "/categories/events/",
+    "result": {"data":{"allMdx":{"totalCount":2,"edges":[{"node":{"id":"19c11caf-76ee-5725-9234-4afea701c637","slug":"2017-05-13-blue-socks-at-orange/","frontmatter":{"title":"Blue Socks Spotted at Orange","date":"13 May, 2017"},"timeToRead":1,"excerpt":"This year, I had the privilege of being invited to join the team of Planning Center exhibitors at the Orange conference in Atlanta, GA. As a develope…"}},{"node":{"id":"12d078fb-e9f7-5a91-87d2-2aafc3fcc5f4","slug":"2013-03-17-silicon-valley-devfest/","frontmatter":{"title":"Silicon Valley DevFest","date":"17 March, 2013"},"timeToRead":1,"excerpt":"Last Friday I attended my first DevFest at Google headquarters in Mountain View. I’m so glad I was able to be there! Not only the event was absolutel…"}}]}},"pageContext":{"category":"events"}},
+    "staticQueryHashes": ["197069131","2201243204","2427728686","2744905544"]}
