@@ -6,6 +6,7 @@ import {
   faGithubSquare,
   faTwitterSquare,
 } from "@fortawesome/free-brands-svg-icons"
+import { faRssSquare } from "@fortawesome/free-solid-svg-icons"
 import { useState } from "react"
 import MediaQuery from "react-responsive"
 
@@ -248,6 +249,19 @@ const Layout = ({ children }) => {
               >
                 <FontAwesomeIcon icon={faTwitterSquare} size="lg" />
                 <span sx={{ px: "5px" }}>TWITTER</span>
+              </a>
+            </li>
+            <li sx={{ display: "inline-block", marginRight: "10px" }}>
+              <a
+                href="https://gabijack.com/rss.xml"
+                sx={{
+                  textDecoration: "none",
+                  color: "inherit",
+                  ":hover": { textDecoration: "underline" },
+                }}
+              >
+                <FontAwesomeIcon icon={faRssSquare} size="lg" />
+                <span sx={{ px: "5px" }}>FEED</span>
               </a>
             </li>
           </ul>
