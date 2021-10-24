@@ -59,6 +59,7 @@ const CategoriesList = () => {
                   sx={{
                     textDecoration: "none",
                     fontWeight: "bold",
+                    color: "#1d2731",
                     ":visited": { color: "#1d2731" },
                     ":hover": { color: "#d9b310" },
                   }}
