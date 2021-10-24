@@ -14,12 +14,18 @@ import {
 } from "@fortawesome/free-solid-svg-icons"
 import { faClock, faCalendarAlt } from "@fortawesome/free-regular-svg-icons"
 import { kebabCase } from "lodash"
+import SharedButtons from "../../components/shared_buttons"
 
 const BlogPostPage = ({ data }) => {
   const post = data.mdx
   const edge = data.allMdx.edges.find((edge) => edge.node.id === post.id)
   const image = getImage(post.frontmatter.image)
   const seoImage = getSrc(post.frontmatter.image)
+
+  const title = `Read ${post.frontmatter.title} `
+  const tags = post.frontmatter.tags
+  const url = `https://gabijack.com/blog/${post.slug}`
+  const twitterHandle = "alluneediscode"
 
   return (
     <Layout>
@@ -99,6 +105,14 @@ const BlogPostPage = ({ data }) => {
             <MDXRenderer>{post.body}</MDXRenderer>
           </div>
         </article>
+        <div sx={{ my: "2rem" }}>
+          <SharedButtons
+            title={title}
+            url={url}
+            twitterHandle={twitterHandle}
+            tags={tags}
+          />
+        </div>
         <div>
           <div sx={{ display: "flex" }}>
             {edge.previous && (
@@ -183,6 +197,7 @@ export const query = graphql`
       id
       body
       timeToRead
+      slug
     }
     allMdx(sort: { fields: frontmatter___date, order: ASC }) {
       edges {

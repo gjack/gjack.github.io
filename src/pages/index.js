@@ -70,12 +70,12 @@ const IndexPage = ({ data }) => {
         }}
       />
       <h3>Most recent posts</h3>
-      <Grid gap={4} columns={[1, 1, 3]} repeat={"fit"} sx={{ marginBottom: 5 }}>
+      <Grid gap={4} columns={[1, 1, 2]} repeat={"fit"} sx={{ marginBottom: 5 }}>
         {posts.map((post, index) => (
           <Box
             key={`post-${post.slug}-${index}`}
             sx={{
-              textAlign: "justify",
+              textAlign: "left",
               padding: "1.25rem",
               backgroundColor: "#328cc1",
               borderRadius: "0.5rem",
@@ -112,7 +112,7 @@ const IndexPage = ({ data }) => {
 export const pageQuery = graphql`
   {
     allMdx(
-      limit: 3
+      limit: 2
       sort: { fields: [frontmatter___date], order: DESC }
       filter: { frontmatter: { draft: { eq: false } } }
     ) {

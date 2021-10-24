@@ -8,7 +8,11 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
   const categoryTemplate = path.resolve("src/templates/categories.js")
   const result = await graphql(`
     {
-      allMdx(sort: { fields: [frontmatter___date], order: DESC }, limit: 1000) {
+      allMdx(
+        sort: { fields: [frontmatter___date], order: DESC }
+        filter: { frontmatter: { draft: { eq: false } } }
+        limit: 1000
+      ) {
         edges {
           node {
             slug
