@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui"
 import Layout from "../components/layout"
-import SEO from "../components/seo"
+import Seo from "../components/seo"
 import { graphql, Link } from "gatsby"
 import { Box, Image, Grid } from "theme-ui"
 import GJack from "../images/gabijackpic.png"
@@ -12,7 +12,7 @@ const IndexPage = ({ data }) => {
 
   return (
     <Layout>
-      <SEO title={"Home Page"} />
+      <Seo title={"Home Page"} />
       <Image
         src={GJack}
         alt={"Gabi Jack"}

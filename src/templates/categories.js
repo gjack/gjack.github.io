@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui"
 import Layout from "../components/layout"
-import SEO from "../components/seo"
+import Seo from "../components/seo"
 import { graphql, Link } from "gatsby"
 import { Themed } from "@theme-ui/mdx"
 import CategoriesList from "../components/categories_list"
@@ -19,7 +19,7 @@ const Categories = ({ pageContext, data }) => {
 
   return (
     <Layout>
-      <SEO title={pageTitle} />
+      <Seo title={pageTitle} />
       <main
         sx={{
           display: "grid",

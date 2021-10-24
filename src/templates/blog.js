@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "theme-ui"
 import Layout from "../components/layout"
-import SEO from "../components/seo"
+import Seo from "../components/seo"
 import { graphql, Link } from "gatsby"
 import { Themed } from "@theme-ui/mdx"
 import TagsList from "../components/tags_list"
@@ -20,7 +20,7 @@ const Blog = ({ pageContext, data }) => {
 
   return (
     <Layout>
-      <SEO title={"Blog"} />
+      <Seo title={"Blog"} />
       <main
         sx={{
           display: "grid",

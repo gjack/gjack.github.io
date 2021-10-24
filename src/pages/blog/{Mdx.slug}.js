@@ -4,7 +4,7 @@ import { graphql, Link } from "gatsby"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import Layout from "../../components/layout"
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
-import SEO from "../../components/seo"
+import Seo from "../../components/seo"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
   faArrowLeft,
@@ -18,7 +18,6 @@ import { kebabCase } from "lodash"
 const BlogPostPage = ({ data }) => {
   const post = data.mdx
   const edge = data.allMdx.edges.find((edge) => edge.node.id === post.id)
-
   const image = getImage(post.frontmatter.image)
   const seoImage = getSrc(post.frontmatter.image)
 
@@ -28,7 +27,7 @@ const BlogPostPage = ({ data }) => {
         sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
       >
         <article sx={{ flex: 1 }}>
-          <SEO
+          <Seo
             title={post.frontmatter.title}
             description={post.frontmatter.description}
             image={seoImage}
@@ -104,9 +103,9 @@ const BlogPostPage = ({ data }) => {
           <div sx={{ display: "flex" }}>
             {edge.previous && (
               <Link
-                sx={{ textAlign: "left" }}
                 to={`/blog/${edge.previous.slug}`}
                 sx={{
+                  textAlign: "left",
                   color: "#0b3c5d",
                   fontWeight: "bold",
                   textDecoration: "none",
@@ -133,9 +132,9 @@ const BlogPostPage = ({ data }) => {
             <div sx={{ mx: "auto" }} />
             {edge.next && (
               <Link
-                sx={{ textAlign: "right" }}
                 to={`/blog/${edge.next.slug}`}
                 sx={{
+                  textAlign: "right",
                   color: "#0b3c5d",
                   fontWeight: "bold",
                   textDecoration: "none",

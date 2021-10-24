@@ -2,7 +2,7 @@
 import { jsx } from "theme-ui"
 import React from "react"
 import Layout from "../components/layout"
-import SEO from "../components/seo"
+import Seo from "../components/seo"
 import { Link } from "gatsby"
 import { Image } from "theme-ui"
 import Books from "../images/books.jpg"
@@ -12,7 +12,7 @@ import JSONdata from "../../content/books.json"
 const ReadingPage = () => {
   return (
     <Layout>
-      <SEO title={"Reading"} />
+      <Seo title={"Reading"} />
       <Image
         src={Books}
         alt={"Books"}
