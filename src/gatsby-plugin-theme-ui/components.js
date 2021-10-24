@@ -3,7 +3,7 @@ import { jsx } from "theme-ui"
 import Prism from "@theme-ui/prism"
 
 export default {
-  pre: (props) => props.children,
+  pre: (props) => <div sx={{ pre: { padding: "1rem" } }}>{props.children}</div>,
   code: Prism,
   blockquote: (props) => (
     <blockquote
