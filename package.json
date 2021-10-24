@@ -1,18 +1,20 @@
 {
-  "name": "gabijackcom-gatsby",
+  "name": "gabijack",
   "version": "1.0.0",
   "private": true,
-  "description": "gabijackcom-gatsby",
+  "description": "Gabi Jack's Blog",
   "author": "gjack",
   "keywords": [
     "gatsby"
   ],
+  "homepage": "gjack.github.io",
   "scripts": {
     "develop": "gatsby develop",
     "start": "gatsby develop",
     "build": "gatsby build",
     "serve": "gatsby serve",
-    "clean": "gatsby clean"
+    "clean": "gatsby clean",
+    "deploy": "gatsby build && gh-pages -d public"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "1.2.36",
@@ -43,5 +45,8 @@
     "react-responsive": "9.0.0-beta.4",
     "react-share": "4.4.0",
     "theme-ui": "0.11.3"
+  },
+  "devDependencies": {
+    "gh-pages": "3.2.3"
   }
 }
