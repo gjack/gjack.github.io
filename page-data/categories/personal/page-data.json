@@ -1,5 +1,5 @@
 {
     "componentChunkName": "component---src-templates-categories-js",
     "path": "/categories/personal/",
-    "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"6ec420d1-e7c5-5d13-b71e-32ea695d605f","slug":"2015-11-01-diary-of-a-dev-joys-of-building","frontmatter":{"title":"Diary of a Junior Dev: The joys of building","date":"01 November, 2015"},"timeToRead":2,"excerpt":"If someone offers you an amazing opportunity and you’re not sure you can do it, say yes – then learn how to do it later.  – Richard Branson Recently,…"}}]}},"pageContext":{"category":"personal"}},
+    "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"ca6c84a6-3aea-5278-bf26-267d43acb227","slug":"2015-11-01-diary-of-a-dev-joys-of-building","frontmatter":{"title":"Diary of a Junior Dev: The joys of building","date":"01 November, 2015"},"timeToRead":2,"excerpt":"If someone offers you an amazing opportunity and you’re not sure you can do it, say yes – then learn how to do it later.  – Richard Branson Recently,…"}}]}},"pageContext":{"category":"personal"}},
     "staticQueryHashes": ["197069131","2201243204","2427728686","2744905544"]}

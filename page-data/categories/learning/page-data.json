@@ -1,5 +1,5 @@
 {
     "componentChunkName": "component---src-templates-categories-js",
     "path": "/categories/learning/",
-    "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"3542588e-2f81-59e7-a2a5-b8e9cf9f0a48","slug":"2012-11-21-makings-of-a-pythonista","frontmatter":{"title":"Makings of a Pythonista","date":"21 November, 2012"},"timeToRead":2,"excerpt":"It’s been a while since the last time I updated this blog, probably because I’ve been too busy learning and doing, with little or no time to write ab…"}}]}},"pageContext":{"category":"learning"}},
+    "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"3378703f-653c-58fd-a11e-7adc675fb79e","slug":"2012-11-21-makings-of-a-pythonista","frontmatter":{"title":"Makings of a Pythonista","date":"21 November, 2012"},"timeToRead":2,"excerpt":"It’s been a while since the last time I updated this blog, probably because I’ve been too busy learning and doing, with little or no time to write ab…"}}]}},"pageContext":{"category":"learning"}},
     "staticQueryHashes": ["197069131","2201243204","2427728686","2744905544"]}
