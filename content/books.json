@@ -3,6 +3,12 @@
     "year": "2021",
     "books": [
       {
+        "title": "Help Your Boss Help You",
+        "link": "https://pragprog.com/titles/kkmanage/help-your-boss-help-you/",
+        "author": "Ken Kousen",
+        "year": "2021"
+      },
+      {
         "title": "The Imposter's Handbook",
         "link": "https://bigmachine.io/products/the-imposters-handbook/",
         "author": "Rob Conery",
