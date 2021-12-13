@@ -1,0 +1,50 @@
+---
+title: Story of a laptop upgrade
+date: 2021-12-12
+tags: [M1, rails, mysql2]
+categories: []
+draft: false
+---
+
+After nearly six years, I've finally upgraded my personal computer! I waited long, 
+but I wanted to be sure the reviews were favorable enough before buying. It's a big investment!
+
+I decided to go with the 16 in Macbook Pro laptop with the Apple M1 chip that came out this year. So far, I'm loving it! 
+It's so quiet and fast!
+
+Of course, setting everything up in a new machine, with this brand new  chip and MacOS Monterey, was a bit daunting. 
+I wanted to install all the necessary gems and libraries that I use for development, 
+but I had heard that some things about the installation process had changed. 
+
+Fortunately for me, I found this very useful guide to [installing Homebrew](https://mac.install.guide/homebrew/index.html). 
+It details all the recent changes regarding to where the files are now installed in these new machines. 
+I highly recommend reading it before you start a new installation. 
+Once I had Homebrew and Xcode installed, I followed along the instructions from [this guide from GoRails](https://gorails.com/setup/osx/12-monterey) 
+to install the correct version of Ruby, Node, Yarn and other gems and packages, as needed, in order to be able to 
+create and run a Rails application in development.
+
+Most of the installation went smoothly, as predicted by the guides. 
+The only one hiccup I found was when attempting to create a new Rails application using MySQL for the database.
+Bundler failed to install the mysql2 gem.
+
+```
+An error occurred while installing mysql2 (0.5.3), and Bundler cannot continue.
+Make sure that `gem install mysql2 -v '0.5.3' --source 'https://rubygems.org/'` succeeds before bundling.
+```
+
+Examining the error closely, it appeared to indicate that the library zstd was not being found. 
+
+```
+ld: library not found for -lzstd
+```
+
+In my case, it wasn't so much that the library was not installed, but it seems it was not being linked from the correct path, 
+so the solution was to install mysql2 indicating the correct path to the library.
+
+```
+gem install mysql2 -v '0.5.3' -- --with-opt-dir=$(brew --prefix openssl) --with-ldflags=-L/opt/homebrew/Cellar/zstd/1.5.0/lib
+```
+
+Once that was done, I was able to finish installing all the necessary gems for my Rails application. Please notice, if you run into 
+this same error and decide to give the command above a try, make sure to substitute for your correct version of mysql2 and the path to the
+zstd library in your machine, since they may not match mine.
