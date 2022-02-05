@@ -1,0 +1,42 @@
+---
+title: The code we write today
+date: 2022-02-04
+tags: [programming]
+categories: []
+draft: false
+image: ./woman-gd0e7e2913_1280.jpg
+imageAlt: The code we write today
+---
+
+Recently, I was tasked with making updates to an existing integration with a third party. 
+Although in the beginning the change sounded very straightforward, I soon realized it would be a lot more complex than I thought and a mild exercise in frustration. 
+As it turns out, it involved more than just updating our use of their API. 
+It required some knowledge of their internal edge cases, as well as the agreements and decisions made in the past that, unfortunately, weren't documented anywhere and not communicated by the API. 
+
+While it may sound like I was simply unlucky, I've come to realize that this is something that happens rather frequently. 
+While working on a new feature, decisions are made based on current limitations or requirements. 
+We choose to pin to a version of a library or gem, because a more recent one would cause trouble with another dependency. 
+Our code was written in a certain way because it made sense at the moment. 
+It was supposed to meet the needs that existed at the time, with the resources and knowledge we possesed. 
+This is all perfectly fine, but it can turn into a problem when we forget to write down why or, at the very least, leave a few breadcrumbs here and there for future us to more easily figure out our intentions and motivations at the moment. 
+
+I know very well that it would be impossible and unreasonable to attempt to write formal documentation for every single change we make to the codebase. 
+Even when formal documentation of a feature does exist, it usually covers how it works, but not why it came to work that way. It does not explain the decisions or limitations that took us from point A to point B, and how those previous decisions would affect our ability to get to point C, should the need arise.
+
+Ruby developers are usually discouraged from writing comments in our code, so I don't expect to find a lot of information in the code itself. 
+Very often, while fixing a bug or tracking down an issue, I like to search the history of commits and pull requests surounding the code I'm interested in. 
+I seek to understand the reasons behind the change. I consider myself truly lucky when the commit messages are as clear and detailed as possible and the pull request includes a full description of the changes being made and the motivations behind them.
+More often than not, however, there's none. This frustrates me tremendously.
+
+A lot has been written about the benefits of good commit messages. 
+They certainly make life easier for those reviewing your pull request, but they also prove invaluable for those digging in the past while making changes. 
+Please, if only as a favor to your future self, avoid ever writing short, vague commit messages, such as *some changes* or *stuff*. 
+As much as possible, try to make atomic commits with meaningful messages. This is something I must admit I still struggle with. 
+It is sometimes very tempting to make a single commit including changes to ten different files, rather than breaking things down in smaller commits that tell a story, but a little extra effort comes a long way. 
+This is also why I'm not a real fan of squashing several commits together and erasing history in the process.
+
+If your team relies on code review and you submit pull requests through Github or any other similar version control, make sure you write thorough descriptions for them. 
+Try to include as much context and detail as you can. If you know of any limitations or caveats to the changes you're making, document them there too. 
+Provide examples of use, links to additional documentation, and screen shots, when applicable.
+Bonus points for updating the description as you incorporate suggestions from your reviewers. 
+Remember, it may seem like tedious extra work but your future self and all those having to maintain your code will thank you for it.
