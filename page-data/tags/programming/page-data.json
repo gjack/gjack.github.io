@@ -1,0 +1,5 @@
+{
+    "componentChunkName": "component---src-templates-tags-js",
+    "path": "/tags/programming/",
+    "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"08584458-be98-53c2-8cf3-9fa51060e04b","slug":"the-code-we-write-today/","frontmatter":{"title":"The code we write today","date":"04 February, 2022"},"timeToRead":3,"excerpt":"Recently, I was tasked with making updates to an existing integration with a third party. \nAlthough in the beginning the change sounded very straight…"}}]}},"pageContext":{"tag":"programming"}},
+    "staticQueryHashes": ["197069131","2201243204","2427728686","2744905544"]}

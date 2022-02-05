@@ -1,0 +1,5 @@
+{
+    "componentChunkName": "component---src-templates-blog-js",
+    "path": "/blog/2",
+    "result": {"data":{"allMdx":{"nodes":[{"id":"3378703f-653c-58fd-a11e-7adc675fb79e","slug":"2012-11-21-makings-of-a-pythonista","excerpt":"It’s been a while since the last time I updated this blog, probably because I’ve been too busy learning and doing, with little or no time to write ab…","timeToRead":2,"frontmatter":{"title":"Makings of a Pythonista","date":"November 21, 2012"}}],"totalCount":11}},"pageContext":{"limit":10,"skip":10,"numPages":2,"currentPage":2}},
+    "staticQueryHashes": ["197069131","2201243204","2427728686","2744905544"]}
