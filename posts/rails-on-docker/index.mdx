@@ -1,0 +1,146 @@
+---
+title: Rails on Docker
+date: 2022-03-13
+tags: [Rails, Docker]
+categories: [programming]
+draft: false
+image: ./horizontal-logo-monochromatic-white.png
+imageAlt: Docker
+---
+
+
+The company I work for uses Docker containers, both in development and production, 
+but the whole things is so abstracted away from the work I do every day as a software developer
+that I had never bothered trying to understand exactly what Docker does for me, or 
+how to run a Rails application with Docker. Until now, that is.
+
+I became curious about Docker while watching some of the latest episodes of [Drifting Ruby](https://www.driftingruby.com/), 
+where I saw a few Rails applications running inside a Docker container. Wishing to learn more, 
+I enrolled in a really good class called [Hands on with Docker and Docker Compose](https://www.udemy.com/course/hands-on-with-docker-and-docker-compose/), that taught me the basics 
+of Docker and Docker Compose through dockerizing a very simple Flask application. Having finished that class, 
+I enrolled in another one called [Scaling Docker on AWS](https://www.udemy.com/course/scaling-docker-on-aws/), by the same author. This second class promised to teach the student how to run, 
+deploy and scale a Rails application inside Docker containers. The class is great and the instructor is awesome, but my only one frustration was the fact that the Dockerfile for the example 
+application starts from a Docker image for Rails 4. There are no existing official Docker images for newer Rails versions. Instead, you are instructed to begin from a 
+Ruby image while building your Dockerfile.
+
+I tried adapting the example in the [Docker documentation](https://docs.docker.com/samples/rails/) to dockerize a Rails 6 application, 
+instead of Rails 5, but it didn't go well. Then, I came across the [Docker for Rails Developers](https://pragprog.com/titles/ridocker/docker-for-rails-developers/) book and followed along 
+using an image for ruby 2.7, instead of the 2.6 one used in the examples. This actually worked out really well!
+
+First, I had to use Docker to run a bash terminal where I could use Ruby and start a new Rails application. It didn't 
+really matter if I had that specific version of Ruby installed in my machine or not, since my terminal would be running 
+in a container using an image downloaded from the Docker hub. The use of the -v option would make sure that all the content would be copied to my current directory.
+
+```
+docker​​ ​​run​​ ​​-i​​ ​​-t​​ ​​--rm​​ ​​-v​​ ​​${PWD}:/usr/src/app​​ ​​ruby:2.7​​ ​​bash
+```
+
+At the terminal prompt, I first installed my desired version of Rails and then created a new application skipping bundle install and tests, 
+because I think I'd rather use rspec, instead. Notice that because `bundle install` was skipped, `rails webpacker:install` also never ran.
+
+```
+cd​​ ​​/usr/src/app
+
+​​gem​​ ​​install​​ ​​rails -v 6.1.4.6
+​​
+​​rails​​ ​​new​​ ​​myapp​​ ​​--skip-test​​ ​​--skip-bundle
+```
+
+My Dockerfile ended up very simple:
+
+
+```
+FROM ruby:2.7
+
+RUN curl https://deb.nodesource.com/setup_12.x | bash
+RUN curl https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+
+RUN apt-get update -yqq && apt-get install -yqq --no-install-recommends \
+nodejs \
+yarn \
+&& rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/src/app
+
+COPY Gemfile* /usr/src/app
+
+RUN bundle install
+
+COPY . /usr/src/app
+
+CMD​​ ["bin/rails", "s", "-b", "0.0.0.0"]
+```
+
+With this Dockerfile in place, I was able to build my image and run a Rails server. 
+
+```
+docker​​ ​​build​​ ​​-t​​ ​​railsapp​​
+
+​​docker​​ ​​run​​ ​​-p​​ ​​3000:3000​​ ​​railsapp​​
+
+```
+
+I then created a simple docker-compose.yml file for my application
+
+```
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+```
+
+And with that file in place, I was able to start my Rails server with a simple command:
+
+```
+docker-compose up
+```
+
+
+I noticed, however, that webpacker was missing. At first, I thought that perhaps I had to include `RUN rails webpacker:install` in the Dockerfile, 
+perhaps right after `bundle install`. This didn't work out. The problem appeared to be that all the files webpacker needed to run were not there. So, 
+I removed that instruction from the Dockerfile and proceeded to install webpacker by running a command in a disposable container.
+
+```
+docker-compose run --rm web bundle exec rails webpacker:install
+```
+
+The previous command installed webpacker successfully, but running `docker-compose up` again started my Rails server, 
+still without webpacker running. Searching around for some information helped me realize that I needed to add webpacker as a service in my docker-compose.yml, 
+so the server could be started and mapped to port 3035, because webpacker usually runs on localhost:3035. My application then would have two services: web and 
+webpack. This is the latest version of my docker-compose.yml file.
+
+```
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      WEBPACKER_DEV_SERVER_HOST: webpack
+    depends_on:
+      - webpack
+    volumes:
+      - .:/usr/src/app:cached
+  
+  webpack:
+    build: .
+    command: bundle exec bin/webpack-dev-server
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - '3035:3035'
+    environment:
+      NODE_ENV: development
+      RAILS_ENV: development
+      WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
+```
+
+Now running `docker-compose up` will start both services, thanks to the `depends_on` property.
