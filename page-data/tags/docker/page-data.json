@@ -1,0 +1,5 @@
+{
+    "componentChunkName": "component---src-templates-tags-js",
+    "path": "/tags/docker/",
+    "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"5e92911a-24f7-562d-8ecd-9a7391960489","slug":"rails-on-docker/","frontmatter":{"title":"Rails on Docker","date":"13 March, 2022"},"timeToRead":2,"excerpt":"The company I work for uses Docker containers, both in development and production, \nbut the whole things is so abstracted away from the work I do eve…"}}]}},"pageContext":{"tag":"Docker"}},
+    "staticQueryHashes": ["197069131","2201243204","2427728686","2744905544"]}
