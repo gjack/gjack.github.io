@@ -1,5 +1,16 @@
 [
   {
+    "year": "2022",
+    "books": [
+      {
+        "title": "Docker for Rails Developers",
+        "link": "https://pragprog.com/titles/ridocker/docker-for-rails-developers/",
+        "author": "Rob Isenberg",
+        "year": "2019"
+      }
+    ]
+  },
+  {
     "year": "2021",
     "books": [
       {
