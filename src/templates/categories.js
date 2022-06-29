@@ -4,6 +4,8 @@ import Layout from "../components/layout"
 import Seo from "../components/seo"
 import { graphql, Link } from "gatsby"
 import { Themed } from "@theme-ui/mdx"
+import { Image } from "theme-ui"
+import LogsBadge from "../images/log-management-fundamentals.png"
 import CategoriesList from "../components/categories_list"
 import TagsList from "../components/tags_list"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -85,6 +87,16 @@ const Categories = ({ pageContext, data }) => {
         <aside>
           <CategoriesList />
           <TagsList />
+          <a href="https://www.credly.com/badges/c654ccd6-00e5-4417-bbc2-06ef46429db4/public_url">
+            <Image
+            src={LogsBadge}
+            alt={"Datadog Logs Management Badge"}
+            sx={{
+              padding: "5px",
+              marginTop: "3rem",
+            }}
+            />
+        </a>
         </aside>
       </main>
     </Layout>

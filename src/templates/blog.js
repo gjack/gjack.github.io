@@ -4,11 +4,13 @@ import Layout from "../components/layout"
 import Seo from "../components/seo"
 import { graphql, Link } from "gatsby"
 import { Themed } from "@theme-ui/mdx"
+import { Image } from "theme-ui"
 import TagsList from "../components/tags_list"
 import CategoriesList from "../components/categories_list"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faClock, faCalendarAlt } from "@fortawesome/free-regular-svg-icons"
 import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons"
+import LogsBadge from "../images/log-management-fundamentals.png"
 
 const Blog = ({ pageContext, data }) => {
   const posts = data.allMdx.nodes
@@ -156,6 +158,16 @@ const Blog = ({ pageContext, data }) => {
         <aside>
           <CategoriesList />
           <TagsList />
+          <a href="https://www.credly.com/badges/c654ccd6-00e5-4417-bbc2-06ef46429db4/public_url">
+          <Image
+          src={LogsBadge}
+          alt={"Datadog Logs Management Badge"}
+          sx={{
+            padding: "5px",
+            marginTop: "3rem",
+          }}
+        />
+        </a>
         </aside>
       </main>
     </Layout>

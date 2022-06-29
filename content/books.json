@@ -3,10 +3,22 @@
     "year": "2022",
     "books": [
       {
+        "title": "Los Diez Escalones",
+        "link": "https://www.amazon.com/Escalones-Autores-Espa%C3%B1oles-Iberoamericanos-Spanish-ebook/dp/B0914H12DY",
+        "author": "Fernando Nuñez",
+        "year": "2022"
+      },
+      {
+        "title": "Building a Second Brain",
+        "link": "https://www.amazon.com/Building-a-Second-Brain/dp/1800812213",
+        "author": "Tiago Forte",
+        "year": "2022"
+      },
+      {
         "title": "Docker for Rails Developers",
         "link": "https://pragprog.com/titles/ridocker/docker-for-rails-developers/",
         "author": "Rob Isenberg",
-        "year": "2019"
+        "year": "2022"
       }
     ]
   },

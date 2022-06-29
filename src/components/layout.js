@@ -266,7 +266,7 @@ const Layout = ({ children }) => {
             </li>
           </ul>
         </div>
-        <div sx={{ px: "2rem" }}>© 2021 Gabi Jack</div>
+        <div sx={{ px: "2rem" }}>© 2022 Gabi Jack</div>
       </footer>
     </div>
   )
