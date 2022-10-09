@@ -3,6 +3,18 @@
     "year": "2022",
     "books": [
       {
+        "title": "Web Apps without Web Servers",
+        "link": "https://learning.oreilly.com/publisher/cde70c0c-24bc-41d1-aab0-8a405063a16e",
+        "author": "Richard Feldman",
+        "year": "2022"
+      },
+      {
+        "title": "Automating Workflows with GitHub Actions",
+        "link": "https://www.amazon.com/Automating-Workflows-GitHub-Actions-applications/dp/1800560400/ref=sr_1_1?crid=26O0TG3HCRRWM&keywords=Automating-Workflows-GitHub-Actions-applications&qid=1665319287&s=books&sprefix=automating-workflows-github-actions-applications%2Cstripbooks%2C70&sr=1-1",
+        "author": "Priscilla Heller",
+        "year": "2022"
+      },
+      {
         "title": "Los Diez Escalones",
         "link": "https://www.amazon.com/Escalones-Autores-Espa%C3%B1oles-Iberoamericanos-Spanish-ebook/dp/B0914H12DY",
         "author": "Fernando Nuñez",
