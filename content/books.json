@@ -1,4 +1,14 @@
 [
+  {"year": "2023",
+   "books": [
+    {
+      "title": "C++ Crash Course",
+      "link": "https://www.amazon.com/dp/1593278888/ref=redir_mobile_desktop?_encoding=UTF8&aaxitk=d8241115b60e13b55b77f19921883fb4&content-id=amzn1.sym.7e9cd8c2-888c-46c4-82d2-714b2b703021%3Aamzn1.sym.7e9cd8c2-888c-46c4-82d2-714b2b703021&hsa_cr_id=4472983330501&pd_rd_plhdr=t&pd_rd_r=d5f68562-75fe-4ce0-bc56-596969abbe16&pd_rd_w=QUH9e&pd_rd_wg=kHkeZ&qid=1674856549&ref_=sbx_be_s_sparkle_mcd_asin_0_img&sr=1-1-9e67e56a-6f64-441f-a281-df67fc737124",
+      "author": "Josh Lospinoso",
+      "year": "2023"
+    }
+   ]
+  },
   {
     "year": "2022",
     "books": [
