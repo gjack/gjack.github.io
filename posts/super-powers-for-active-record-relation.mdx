@@ -1,0 +1,72 @@
+---
+title: Super Powers for ActiveRecord::Relation
+date: 2024-05-31
+tags: [programming, rails]
+categories: []
+draft: true
+---
+
+Whenever you query your database with Rails, what you get in return is an An ActiveRecord::Relation; 
+a chainable object that is lazily evaluated against the database only when the actual records are needed.
+Usually, you can chain other class methods and scopes to this ActiveRecord::Relation. 
+For instance, let's say you have a Post model with a `featured` scope.
+
+```
+Post.where(topic: "animals").featured
+```
+
+This is good, but it only applies to the Post model, where the class method or scope is defined.
+
+There is a way, however, to add other chainable methods that can be shared by all models with the clever use of a concern. 
+Let's say you want to add a way to generate a CSV string out of an ActiveRecord::Relation. 
+Then you could simply chain a method, such as `to_csv` to any query and get a CSV string representation of all the rows, 
+using the name of the returned columns as headers.
+
+```
+  Post.featured.select(:author_name, :topic).limit(2).to_csv 
+
+  => "author_name,topic\nJohn Mountains,Nature\nAlma Aqua,Sea Levels\n"
+
+Books.where(subject: "programming").select(:name, :publisher).limit(2).to_csv
+
+  => "name,publisher\nSecure APIs,Manning\nEffective Go Recipes,Pragmatic Bookshelf\n"
+```
+
+To achieve this you could add a concern such as this one:
+
+```
+require "csv"
+
+module CSVPrintable
+  extend ActiveSupport::Concern
+
+  class_methods do
+    class CSVHeadersMismatchError < StandardError; end
+
+    def to_csv(headers: nil)
+      return "" unless all.any?
+
+      attribs = all.first.attributes.reject { |k, v| k == "id" && v.nil? }
+      column_names = attribs.keys
+
+      raise CSVHeadersMismatchError, "Headers should match column numbers in query" if headers.present? && headers.length != column_names.length
+
+      CSV.generate(headers: headers || column_names, write_headers: true) do |csv|
+        all.each do |re|
+          csv << re.attributes.values_at(*column_names)
+        end
+      end
+    end
+  end
+end
+```
+
+Then, to make it available to all your models, simply add it to ApplicationRecord, from which all your models inherit from.
+
+```
+class ApplicationRecord < ActiveRecord::Base
+  self.abstract_class = true
+
+  include CSVPrintable
+end
+```
