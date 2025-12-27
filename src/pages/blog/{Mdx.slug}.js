@@ -35,7 +35,7 @@ const BlogPostPage = ({ data }) => {
             image={seoImage}
             imageAlt={post.frontmatter.imageAlt}
           />
-          <Typography variant="h1" component="h1">
+          <Typography variant="h1" component="h1" sx={{ fontWeight: 600, color: "primary.main", mb: 2 }}>
             {post.frontmatter.title}
           </Typography>
           <Box sx={{ textAlign: "justify" }}>
@@ -43,18 +43,19 @@ const BlogPostPage = ({ data }) => {
               sx={{
                 display: "flex",
                 flexDirection: "column",
+                gap: 0.5,
                 marginBottom: "3rem",
               }}
             >
               <Typography
-                component="small"
-                sx={{ fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}
+                variant="body2"
+                sx={{ fontWeight: 400, display: "flex", alignItems: "center", gap: 1, color: "#5a6c7d", fontSize: "0.875rem" }}
               >
-                <CalendarToday fontSize="small" />
+                <CalendarToday sx={{ fontSize: "0.875rem" }} />
                 <Box component="span">{post.frontmatter.date}</Box>
               </Typography>
-              <Typography component="small" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <AccessTime fontSize="small" />
+              <Typography variant="body2" sx={{ fontWeight: 400, display: "flex", alignItems: "center", gap: 1, color: "#5a6c7d", fontSize: "0.875rem" }}>
+                <AccessTime sx={{ fontSize: "0.875rem" }} />
                 <Box component="span">{`${post.timeToRead} ${
                   post.timeToRead === 1 ? "minute read" : "minutes read"
                 }`}</Box>

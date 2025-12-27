@@ -31,7 +31,7 @@ const Blog = ({ pageContext, data }) => {
         }}
       >
         <Box sx={{ textAlign: "justify" }}>
-          <Typography variant="h2" component="h2" sx={{ px: 3 }}>
+          <Typography variant="h2" component="h2" sx={{ px: 3, fontWeight: 600, color: "primary.main" }}>
             Recent posts
           </Typography>
           <Box
@@ -56,6 +56,7 @@ const Blog = ({ pageContext, data }) => {
                   component="h3"
                   sx={{
                     m: 0,
+                    fontWeight: 600,
                   }}
                 >
                   <MuiLink
@@ -72,16 +73,16 @@ const Blog = ({ pageContext, data }) => {
                     {post.frontmatter.title}
                   </MuiLink>
                 </Typography>
-                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5, mt: 1 }}>
                   <Typography
-                    component="small"
-                    sx={{ fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}
+                    variant="body2"
+                    sx={{ fontWeight: 400, display: "flex", alignItems: "center", gap: 1, color: "#5a6c7d", fontSize: "0.875rem" }}
                   >
-                    <CalendarToday fontSize="small" />
+                    <CalendarToday sx={{ fontSize: "0.875rem" }} />
                     <Box component="span">{post.frontmatter.date}</Box>
                   </Typography>
-                  <Typography component="small" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <AccessTime fontSize="small" />
+                  <Typography variant="body2" sx={{ fontWeight: 400, display: "flex", alignItems: "center", gap: 1, color: "#5a6c7d", fontSize: "0.875rem" }}>
+                    <AccessTime sx={{ fontSize: "0.875rem" }} />
                     <Box component="span">{`${post.timeToRead} ${
                       post.timeToRead === 1 ? "minute" : "minutes"
                     }`}</Box>

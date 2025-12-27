@@ -24,15 +24,39 @@ const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: '-apple-system, Roboto, sans-serif, serif',
+    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     h1: {
-      fontWeight: 'bold',
+      fontWeight: 600,
+      color: '#0b3c5d',
     },
     h2: {
-      fontWeight: 'bold',
+      fontWeight: 600,
+      color: '#0b3c5d',
     },
     h3: {
-      fontWeight: 'bold',
+      fontWeight: 600,
+      color: '#0b3c5d',
+      fontSize: '1.75rem',
+    },
+    h4: {
+      fontWeight: 600,
+      color: '#0b3c5d',
+    },
+    h5: {
+      fontWeight: 600,
+      color: '#0b3c5d',
+    },
+    h6: {
+      fontWeight: 600,
+      color: '#0b3c5d',
+    },
+    body1: {
+      lineHeight: 1.7,
+      color: '#1d2731',
+    },
+    body2: {
+      lineHeight: 1.6,
+      color: '#5a6c7d',
     },
   },
   breakpoints: {

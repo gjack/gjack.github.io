@@ -41,36 +41,15 @@ const ReadingPage = () => {
           find them interesting too.
         </Typography>
       </Box>
-      <Box
-        component="hr"
-        sx={{
-          color: "primary.main",
-          textAlign: "center",
-          width: "90%",
-          border: "none",
-          borderTop: "3px double",
-          borderColor: "primary.main",
-          overflow: "visible",
-          height: "5px",
-          my: 5,
-          "&::after": {
-            background: "background.default",
-            content: '"\\270E"',
-            padding: "0 4px",
-            position: "relative",
-            top: "-13px",
-          },
-        }}
-      />
-      <Typography variant="h3" component="h3" sx={{ mb: 3 }}>
+      <Typography variant="h3" component="h2" sx={{ mb: 4, mt: 6, fontWeight: 600, color: "primary.main" }}>
         Recently read books
       </Typography>
       {JSONdata.map((group, groupIndex) => (
         <Box key={`year-${groupIndex}`}>
           <Typography
             variant="h4"
-            component="h4"
-            sx={{ textAlign: "left", fontWeight: "bold", mb: 2 }}
+            component="h3"
+            sx={{ textAlign: "left", fontWeight: 600, mb: 2, color: "primary.main" }}
           >
             {group.year}
           </Typography>

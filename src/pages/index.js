@@ -51,28 +51,7 @@ const IndexPage = ({ data }) => {
           interesting from time to time.
         </Typography>
       </Box>
-      <Box
-        component="hr"
-        sx={{
-          color: "primary.main",
-          textAlign: "center",
-          width: "90%",
-          border: "none",
-          borderTop: "3px double",
-          borderColor: "primary.main",
-          overflow: "visible",
-          height: "5px",
-          my: 5,
-          "&::after": {
-            background: "background.default",
-            content: '"\\270E"',
-            padding: "0 4px",
-            position: "relative",
-            top: "-13px",
-          },
-        }}
-      />
-      <Typography variant="h3" component="h3" sx={{ mb: 3 }}>
+      <Typography variant="h3" component="h2" sx={{ mb: 4, mt: 6, fontWeight: 600, color: 'primary.main' }}>
         Most recent posts
       </Typography>
       <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" }, gap: 4, marginBottom: 5 }}>
@@ -81,23 +60,31 @@ const IndexPage = ({ data }) => {
             key={`post-${post.slug}-${index}`}
             sx={{
               textAlign: "left",
-              backgroundColor: "secondary.main",
-              borderRadius: "0.5rem",
-              boxShadow: "0px 9px 9px 1px rgb(0 0 70 / 20%)",
+              backgroundColor: "#f0f7fb",
+              borderTop: "3px solid",
+              borderTopColor: "secondary.main",
+              borderRadius: "8px",
+              boxShadow: "0 2px 8px rgba(50, 140, 193, 0.08)",
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-around",
+              justifyContent: "space-between",
+              transition: "all 0.3s ease",
+              "&:hover": {
+                boxShadow: "0 4px 16px rgba(50, 140, 193, 0.15)",
+                transform: "translateY(-2px)",
+                backgroundColor: "#ffffff",
+              },
             }}
           >
             <CardContent>
               <Typography
                 variant="h5"
                 component="h3"
-                sx={{ textAlign: "center", fontWeight: "bold", mb: 2 }}
+                sx={{ fontWeight: 600, mb: 2, color: "primary.main", lineHeight: 1.3 }}
               >
                 {post.frontmatter.title}
               </Typography>
-              <Typography component="div" sx={{ mb: 2 }}>
+              <Typography component="div" sx={{ mb: 2, color: "text.primary", lineHeight: 1.6 }}>
                 {post.excerpt}
               </Typography>
               <MuiLink
@@ -106,14 +93,15 @@ const IndexPage = ({ data }) => {
                 sx={{
                   textAlign: "right",
                   textDecoration: "none",
-                  color: "text.primary",
+                  color: "secondary.main",
                   display: "block",
+                  fontWeight: "600",
                   "&:hover": {
                     color: "warning.main",
                   },
                 }}
               >
-                Continue reading
+                Continue reading →
               </MuiLink>
             </CardContent>
           </Card>

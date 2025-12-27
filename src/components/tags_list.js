@@ -20,14 +20,17 @@ const TagsList = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "secondary.main",
-        p: "1rem",
-        borderRadius: "0.5rem",
+        backgroundColor: "#f0f7fb",
+        p: "1.5rem",
+        borderRadius: "8px",
         my: "2rem",
+        boxShadow: "0 2px 8px rgba(50, 140, 193, 0.08)",
+        borderTop: "3px solid",
+        borderTopColor: "secondary.main",
       }}
     >
-      <Typography variant="h6" component="h3" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-        <LocalOfferOutlined fontSize="large" />
+      <Typography variant="h6" component="h3" sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2, color: "primary.main", fontWeight: "bold" }}>
+        <LocalOfferOutlined fontSize="medium" />
         Tags
       </Typography>
       <Box
@@ -56,10 +59,11 @@ const TagsList = () => {
               to={`/tags/${kebabCase(tag.fieldValue)}/`}
               sx={{
                 textDecoration: "none",
-                fontWeight: "bold",
-                color: "text.primary",
-                "&:visited": { color: "text.primary" },
-                "&:hover": { color: "warning.main" },
+                fontWeight: "600",
+                color: "secondary.main",
+                fontSize: "0.9rem",
+                "&:visited": { color: "secondary.main" },
+                "&:hover": { color: "warning.main", textDecoration: "underline" },
               }}
             >
               {tag.fieldValue}
