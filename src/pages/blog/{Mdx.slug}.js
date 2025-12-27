@@ -1,7 +1,6 @@
 import React from "react"
 import { graphql, Link as GatsbyLink } from "gatsby"
 import { MDXRenderer } from "gatsby-plugin-mdx"
-import { MDXProvider } from "@mdx-js/react"
 import Layout from "../../components/layout"
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
 import Seo from "../../components/seo"
@@ -14,7 +13,6 @@ import AccessTime from "@mui/icons-material/AccessTime"
 import CalendarToday from "@mui/icons-material/CalendarToday"
 import { kebabCase } from "lodash"
 import SharedButtons from "../../components/shared_buttons"
-import mdxComponents from "../../components/mdx-components"
 
 const BlogPostPage = ({ data }) => {
   const post = data.mdx
@@ -114,9 +112,7 @@ const BlogPostPage = ({ data }) => {
             {image && (
               <GatsbyImage image={image} alt={post.frontmatter.imageAlt} />
             )}
-            <MDXProvider components={mdxComponents}>
-              <MDXRenderer>{post.body}</MDXRenderer>
-            </MDXProvider>
+            <MDXRenderer>{post.body}</MDXRenderer>
           </Box>
         </Box>
         <Box sx={{ my: "2rem" }}>

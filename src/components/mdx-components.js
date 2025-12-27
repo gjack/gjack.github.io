@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Paper } from '@mui/material';
+import { Box } from '@mui/material';
 
 // Code block styling (for ``` code blocks ```)
 const Pre = (props) => (
@@ -66,20 +66,28 @@ const InlineCode = ({ className, ...props }) => {
 };
 
 const Blockquote = (props) => (
-  <Paper
+  <Box
     component="blockquote"
-    elevation={0}
     sx={{
-      background: '#f9f9f9',
-      borderLeft: '10px solid #ccc',
-      margin: '1.5em 10px',
-      padding: '1em 10px 0.1em 10px',
+      background: '#f0f7fb',
+      borderLeft: '4px solid #328cc1',
+      margin: '2em 0',
+      padding: '1.5em 1.5em 1em 1.5em',
+      borderRadius: '4px',
+      fontStyle: 'italic',
+      fontSize: '1.1rem',
+      color: '#0b3c5d',
+      boxShadow: '0 2px 8px rgba(50, 140, 193, 0.1)',
+      '& p': {
+        margin: 0,
+      },
       '& em': {
         display: 'block',
         textAlign: 'right',
-        fontSize: '0.8em',
+        fontSize: '0.875rem',
         marginTop: 2,
         fontStyle: 'italic',
+        color: '#5a6c7d',
       },
     }}
     {...props}
