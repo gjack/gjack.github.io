@@ -7,7 +7,7 @@ import FolderOpen from "@mui/icons-material/FolderOpen"
 const CategoriesList = () => {
   const { allMdx } = useStaticQuery(graphql`
     {
-      allMdx {
+      allMdx(filter: { frontmatter: { draft: { eq: false } } }) {
         group(field: frontmatter___categories) {
           totalCount
           fieldValue
@@ -38,11 +38,10 @@ const CategoriesList = () => {
         sx={{
           listStyle: "none",
           m: 0,
-          px: 2,
-          py: 3,
-          display: "grid",
-          gridTemplateColumns: "repeat(2, 1fr)",
-          gap: 3,
+          p: 0,
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 2,
         }}
       >
         {categories.map((category) => (
@@ -50,7 +49,6 @@ const CategoriesList = () => {
             component="li"
             key={category.fieldValue}
             sx={{
-              textAlign: "center",
               padding: "0",
             }}
           >
@@ -59,13 +57,17 @@ const CategoriesList = () => {
               to={`/categories/${kebabCase(category.fieldValue)}/`}
               sx={{
                 textDecoration: "none",
-                fontWeight: "600",
+                fontWeight: "500",
                 color: "secondary.main",
                 fontSize: "0.9rem",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 0.5,
                 "&:visited": { color: "secondary.main" },
                 "&:hover": { color: "warning.main", textDecoration: "underline" },
               }}
             >
+              <FolderOpen sx={{ fontSize: "1rem" }} />
               {category.fieldValue}
             </MuiLink>
           </Box>

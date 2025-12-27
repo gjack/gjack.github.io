@@ -19,12 +19,18 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
           }
         }
       }
-      tagsGroup: allMdx(limit: 2000) {
+      tagsGroup: allMdx(
+        limit: 2000
+        filter: { frontmatter: { draft: { eq: false } } }
+      ) {
         group(field: frontmatter___tags) {
           fieldValue
         }
       }
-      categoriesGroup: allMdx(limit: 2000) {
+      categoriesGroup: allMdx(
+        limit: 2000
+        filter: { frontmatter: { draft: { eq: false } } }
+      ) {
         group(field: frontmatter___categories) {
           fieldValue
         }
