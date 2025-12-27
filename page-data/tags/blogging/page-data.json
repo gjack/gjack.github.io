@@ -2,4 +2,4 @@
     "componentChunkName": "component---src-templates-tags-js",
     "path": "/tags/blogging/",
     "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"db5caf55-934b-5de1-aa6b-5a2078e4f869","slug":"once-upon-a-blog/","frontmatter":{"title":"Once upon a Blog","date":"24 October, 2021"},"timeToRead":2,"excerpt":"If you've known me for a while, you may also know this is probably the third or fourth of many incarnations of this blog.\nAnd that's without counting…"}}]}},"pageContext":{"tag":"blogging"}},
-    "staticQueryHashes": ["197069131","2201243204","2427728686","2744905544"]}
+    "staticQueryHashes": ["2201243204","2484670584","469546184"]}

@@ -2,4 +2,4 @@
     "componentChunkName": "component---src-pages-index-js",
     "path": "/",
     "result": {"data":{"allMdx":{"nodes":[{"id":"3d5d8b08-cf43-57be-8c43-aad95e2dfd06","slug":"super-powers-for-active-record-relation","excerpt":"Whenever you query your database with Rails, what you get in return is an An ActiveRecord::Relation; \na chainable object that is lazily…","frontmatter":{"title":"Super Powers for ActiveRecord::Relation"}},{"id":"534e725d-71be-5e6f-ace7-75db51185701","slug":"rails-on-docker-part-two/","excerpt":"As I continued following along the tutorial from the book  Docker for Rails Developers , \nit was about to become evident that a lot had…","frontmatter":{"title":"Rails on Docker Part Two"}}]}},"pageContext":{}},
-    "staticQueryHashes": ["2201243204","2744905544"]}
+    "staticQueryHashes": ["2201243204"]}

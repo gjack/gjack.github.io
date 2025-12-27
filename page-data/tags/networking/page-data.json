@@ -2,4 +2,4 @@
     "componentChunkName": "component---src-templates-tags-js",
     "path": "/tags/networking/",
     "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"edcdad98-0f1c-5f08-b9bf-ef2584a6784d","slug":"2013-03-17-silicon-valley-devfest/","frontmatter":{"title":"Silicon Valley DevFest","date":"17 March, 2013"},"timeToRead":1,"excerpt":"Last Friday I attended my first DevFest at Google headquarters in Mountain View. I’m so glad I was able to be there! Not only the event was absolutel…"}}]}},"pageContext":{"tag":"networking"}},
-    "staticQueryHashes": ["197069131","2201243204","2427728686","2744905544"]}
+    "staticQueryHashes": ["2201243204","2484670584","469546184"]}

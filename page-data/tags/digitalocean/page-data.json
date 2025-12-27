@@ -2,4 +2,4 @@
     "componentChunkName": "component---src-templates-tags-js",
     "path": "/tags/digitalocean/",
     "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"534e725d-71be-5e6f-ace7-75db51185701","slug":"rails-on-docker-part-two/","frontmatter":{"title":"Rails on Docker Part Two","date":"02 April, 2022"},"timeToRead":3,"excerpt":"As I continued following along the tutorial from the book  Docker for Rails Developers , \nit was about to become evident that a lot had changed since…"}}]}},"pageContext":{"tag":"digitalocean"}},
-    "staticQueryHashes": ["197069131","2201243204","2427728686","2744905544"]}
+    "staticQueryHashes": ["2201243204","2484670584","469546184"]}

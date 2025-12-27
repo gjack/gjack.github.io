@@ -2,4 +2,4 @@
     "componentChunkName": "component---src-templates-tags-js",
     "path": "/tags/rails/",
     "result": {"data":{"allMdx":{"totalCount":2,"edges":[{"node":{"id":"3d5d8b08-cf43-57be-8c43-aad95e2dfd06","slug":"super-powers-for-active-record-relation","frontmatter":{"title":"Super Powers for ActiveRecord::Relation","date":"31 May, 2024"},"timeToRead":1,"excerpt":"Whenever you query your database with Rails, what you get in return is an An ActiveRecord::Relation; \na chainable object that is lazily evaluated aga…"}},{"node":{"id":"91dabe95-0227-5d01-b1d1-f10959c5d43a","slug":"story-of-a-laptop-upgrade","frontmatter":{"title":"Story of a laptop upgrade","date":"12 December, 2021"},"timeToRead":1,"excerpt":"After nearly six years, I've finally upgraded my personal computer! I waited long, \nbut I wanted to be sure the reviews were favorable enough before …"}}]}},"pageContext":{"tag":"rails"}},
-    "staticQueryHashes": ["197069131","2201243204","2427728686","2744905544"]}
+    "staticQueryHashes": ["2201243204","2484670584","469546184"]}
