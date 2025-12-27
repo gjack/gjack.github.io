@@ -140,19 +140,25 @@ const Layout = ({ children }) => {
             <ListItem button component={GatsbyLink} to="/">
               <ListItemText
                 primary="Home"
-                primaryTypographyProps={{ fontWeight: "bold" }}
+                slotProps={{
+                  primary: { fontWeight: "bold" }
+                }}
               />
             </ListItem>
             <ListItem button component={GatsbyLink} to="/blog">
               <ListItemText
                 primary="Blog"
-                primaryTypographyProps={{ fontWeight: "bold" }}
+                slotProps={{
+                  primary: { fontWeight: "bold" }
+                }}
               />
             </ListItem>
             <ListItem button component={GatsbyLink} to="/reading">
               <ListItemText
                 primary="Reading"
-                primaryTypographyProps={{ fontWeight: "bold" }}
+                slotProps={{
+                  primary: { fontWeight: "bold" }
+                }}
               />
             </ListItem>
           </List>
