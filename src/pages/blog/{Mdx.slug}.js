@@ -1,6 +1,7 @@
 import React from "react"
 import { graphql, Link as GatsbyLink } from "gatsby"
 import { MDXRenderer } from "gatsby-plugin-mdx"
+import { MDXProvider } from "@mdx-js/react"
 import Layout from "../../components/layout"
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
 import Seo from "../../components/seo"
@@ -13,6 +14,7 @@ import AccessTime from "@mui/icons-material/AccessTime"
 import CalendarToday from "@mui/icons-material/CalendarToday"
 import { kebabCase } from "lodash"
 import SharedButtons from "../../components/shared_buttons"
+import mdxComponents from "../../components/mdx-components"
 
 const BlogPostPage = ({ data }) => {
   const post = data.mdx
@@ -35,7 +37,7 @@ const BlogPostPage = ({ data }) => {
             image={seoImage}
             imageAlt={post.frontmatter.imageAlt}
           />
-          <Typography variant="h1" component="h1" sx={{ fontWeight: 600, color: "primary.main", mb: 2 }}>
+          <Typography variant="h1" component="h1" sx={{ fontWeight: 600, color: "primary.main", mb: 2, fontSize: { xs: "2rem", sm: "2.5rem", md: "3rem" } }}>
             {post.frontmatter.title}
           </Typography>
           <Box sx={{ textAlign: "justify" }}>
@@ -112,7 +114,9 @@ const BlogPostPage = ({ data }) => {
             {image && (
               <GatsbyImage image={image} alt={post.frontmatter.imageAlt} />
             )}
-            <MDXRenderer>{post.body}</MDXRenderer>
+            <MDXProvider components={mdxComponents}>
+              <MDXRenderer>{post.body}</MDXRenderer>
+            </MDXProvider>
           </Box>
         </Box>
         <Box sx={{ my: "2rem" }}>

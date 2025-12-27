@@ -31,14 +31,14 @@ First, I had to use Docker to run a bash terminal where I could use Ruby and sta
 really matter if I had that specific version of Ruby installed in my machine or not, since my terminal would be running 
 in a container using an image downloaded from the Docker hub. The use of the -v option would make sure that all the content would be copied to my current directory.
 
-```
+```bash
 docker​​ ​​run​​ ​​-i​​ ​​-t​​ ​​--rm​​ ​​-v​​ ​​${PWD}:/usr/src/app​​ ​​ruby:2.7​​ ​​bash
 ```
 
 At the terminal prompt, I first installed my desired version of Rails and then created a new application skipping bundle install and tests, 
 because I think I'd rather use rspec, instead. Notice that because `bundle install` was skipped, `rails webpacker:install` also never ran.
 
-```
+```bash
 cd​​ ​​/usr/src/app
 
 ​​gem​​ ​​install​​ ​​rails -v 6.1.4.6
@@ -49,7 +49,7 @@ cd​​ ​​/usr/src/app
 My Dockerfile ended up very simple:
 
 
-```
+```dockerfile
 FROM ruby:2.7
 
 RUN curl https://deb.nodesource.com/setup_12.x | bash
@@ -72,9 +72,9 @@ COPY . /usr/src/app
 CMD​​ ["bin/rails", "s", "-b", "0.0.0.0"]
 ```
 
-With this Dockerfile in place, I was able to build my image and run a Rails server. 
+With this Dockerfile in place, I was able to build my image and run a Rails server.
 
-```
+```bash
 docker​​ ​​build​​ ​​-t​​ ​​railsapp​​
 
 ​​docker​​ ​​run​​ ​​-p​​ ​​3000:3000​​ ​​railsapp​​
@@ -83,7 +83,7 @@ docker​​ ​​build​​ ​​-t​​ ​​railsapp​​
 
 I then created a simple docker-compose.yml file for my application
 
-```
+```yaml
 version: '3'
 
 services:
@@ -97,7 +97,7 @@ services:
 
 And with that file in place, I was able to start my Rails server with a simple command:
 
-```
+```bash
 docker-compose up
 ```
 
@@ -106,7 +106,7 @@ I noticed, however, that webpacker was missing. At first, I thought that perhaps
 perhaps right after `bundle install`. This didn't work out. The problem appeared to be that all the files webpacker needed to run were not there. So, 
 I removed that instruction from the Dockerfile and proceeded to install webpacker by running a command in a disposable container.
 
-```
+```bash
 docker-compose run --rm web bundle exec rails webpacker:install
 ```
 
@@ -115,7 +115,7 @@ still without webpacker running. Searching around for some information helped me
 so the server could be started and mapped to port 3035, because webpacker usually runs on localhost:3035. My application then would have two services: web and 
 webpack. This is the latest version of my docker-compose.yml file.
 
-```
+```yaml
 version: '3'
 
 services:
