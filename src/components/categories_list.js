@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Grid, Typography, Link as MuiLink } from "@mui/material"
+import { Box, Typography, Link as MuiLink } from "@mui/material"
 import { useStaticQuery, graphql, Link as GatsbyLink } from "gatsby"
 import { kebabCase } from "lodash"
 import FolderOpen from "@mui/icons-material/FolderOpen"
@@ -37,35 +37,35 @@ const CategoriesList = () => {
           m: 0,
           px: 2,
           py: 3,
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: 3,
         }}
       >
-        <Grid container spacing={3}>
-          {categories.map((category) => (
-            <Grid item xs={6} key={category.fieldValue}>
-              <Box
-                component="li"
-                sx={{
-                  textAlign: "center",
-                  padding: "0",
-                }}
-              >
-                <MuiLink
-                  component={GatsbyLink}
-                  to={`/categories/${kebabCase(category.fieldValue)}/`}
-                  sx={{
-                    textDecoration: "none",
-                    fontWeight: "bold",
-                    color: "text.primary",
-                    "&:visited": { color: "text.primary" },
-                    "&:hover": { color: "warning.main" },
-                  }}
-                >
-                  {category.fieldValue}
-                </MuiLink>
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
+        {categories.map((category) => (
+          <Box
+            component="li"
+            key={category.fieldValue}
+            sx={{
+              textAlign: "center",
+              padding: "0",
+            }}
+          >
+            <MuiLink
+              component={GatsbyLink}
+              to={`/categories/${kebabCase(category.fieldValue)}/`}
+              sx={{
+                textDecoration: "none",
+                fontWeight: "bold",
+                color: "text.primary",
+                "&:visited": { color: "text.primary" },
+                "&:hover": { color: "warning.main" },
+              }}
+            >
+              {category.fieldValue}
+            </MuiLink>
+          </Box>
+        ))}
       </Box>
     </Box>
   )

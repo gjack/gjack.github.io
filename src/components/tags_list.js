@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Grid, Typography, Link as MuiLink } from "@mui/material"
+import { Box, Typography, Link as MuiLink } from "@mui/material"
 import { useStaticQuery, graphql, Link as GatsbyLink } from "gatsby"
 import { kebabCase } from "lodash"
 import LocalOfferOutlined from "@mui/icons-material/LocalOfferOutlined"
@@ -37,35 +37,35 @@ const TagsList = () => {
           m: 0,
           px: 2,
           py: 3,
+          display: "grid",
+          gridTemplateColumns: "repeat(2, 1fr)",
+          gap: 3,
         }}
       >
-        <Grid container spacing={3}>
-          {tags.map((tag) => (
-            <Grid item xs={6} key={tag.fieldValue}>
-              <Box
-                component="li"
-                sx={{
-                  textAlign: "center",
-                  padding: "0",
-                }}
-              >
-                <MuiLink
-                  component={GatsbyLink}
-                  to={`/tags/${kebabCase(tag.fieldValue)}/`}
-                  sx={{
-                    textDecoration: "none",
-                    fontWeight: "bold",
-                    color: "text.primary",
-                    "&:visited": { color: "text.primary" },
-                    "&:hover": { color: "warning.main" },
-                  }}
-                >
-                  {tag.fieldValue}
-                </MuiLink>
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
+        {tags.map((tag) => (
+          <Box
+            component="li"
+            key={tag.fieldValue}
+            sx={{
+              textAlign: "center",
+              padding: "0",
+            }}
+          >
+            <MuiLink
+              component={GatsbyLink}
+              to={`/tags/${kebabCase(tag.fieldValue)}/`}
+              sx={{
+                textDecoration: "none",
+                fontWeight: "bold",
+                color: "text.primary",
+                "&:visited": { color: "text.primary" },
+                "&:hover": { color: "warning.main" },
+              }}
+            >
+              {tag.fieldValue}
+            </MuiLink>
+          </Box>
+        ))}
       </Box>
     </Box>
   )

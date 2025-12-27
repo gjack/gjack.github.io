@@ -2,7 +2,7 @@ import React from "react"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
 import { graphql, Link as GatsbyLink } from "gatsby"
-import { Box, Grid, Card, CardContent, Link as MuiLink, Typography } from "@mui/material"
+import { Box, Card, CardContent, Link as MuiLink, Typography } from "@mui/material"
 import GJack from "../images/gabijackpic.png"
 
 // markup
@@ -75,52 +75,50 @@ const IndexPage = ({ data }) => {
       <Typography variant="h3" component="h3" sx={{ mb: 3 }}>
         Most recent posts
       </Typography>
-      <Grid container spacing={4} sx={{ marginBottom: 5 }}>
+      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", sm: "repeat(2, 1fr)" }, gap: 4, marginBottom: 5 }}>
         {posts.map((post, index) => (
-          <Grid item xs={12} md={6} key={`post-${post.slug}-${index}`}>
-            <Card
-              sx={{
-                textAlign: "left",
-                backgroundColor: "secondary.main",
-                borderRadius: "0.5rem",
-                boxShadow: "0px 9px 9px 1px rgb(0 0 70 / 20%)",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-around",
-                height: "100%",
-              }}
-            >
-              <CardContent>
-                <Typography
-                  variant="h5"
-                  component="h3"
-                  sx={{ textAlign: "center", fontWeight: "bold", mb: 2 }}
-                >
-                  {post.frontmatter.title}
-                </Typography>
-                <Typography component="div" sx={{ mb: 2 }}>
-                  {post.excerpt}
-                </Typography>
-                <MuiLink
-                  component={GatsbyLink}
-                  to={`/blog/${post.slug}`}
-                  sx={{
-                    textAlign: "right",
-                    textDecoration: "none",
-                    color: "text.primary",
-                    display: "block",
-                    "&:hover": {
-                      color: "warning.main",
-                    },
-                  }}
-                >
-                  Continue reading
-                </MuiLink>
-              </CardContent>
-            </Card>
-          </Grid>
+          <Card
+            key={`post-${post.slug}-${index}`}
+            sx={{
+              textAlign: "left",
+              backgroundColor: "secondary.main",
+              borderRadius: "0.5rem",
+              boxShadow: "0px 9px 9px 1px rgb(0 0 70 / 20%)",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-around",
+            }}
+          >
+            <CardContent>
+              <Typography
+                variant="h5"
+                component="h3"
+                sx={{ textAlign: "center", fontWeight: "bold", mb: 2 }}
+              >
+                {post.frontmatter.title}
+              </Typography>
+              <Typography component="div" sx={{ mb: 2 }}>
+                {post.excerpt}
+              </Typography>
+              <MuiLink
+                component={GatsbyLink}
+                to={`/blog/${post.slug}`}
+                sx={{
+                  textAlign: "right",
+                  textDecoration: "none",
+                  color: "text.primary",
+                  display: "block",
+                  "&:hover": {
+                    color: "warning.main",
+                  },
+                }}
+              >
+                Continue reading
+              </MuiLink>
+            </CardContent>
+          </Card>
         ))}
-      </Grid>
+      </Box>
     </Layout>
   )
 }
