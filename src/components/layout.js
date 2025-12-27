@@ -191,72 +191,92 @@ const Layout = ({ children }) => {
           minHeight: "15%",
         }}
       >
-        <Box sx={{ fontSize: "16px", fontWeight: "bold" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: { xs: "flex-start", sm: "center" },
+            justifyContent: "space-between",
+            gap: 2,
+          }}
+        >
           <Box
-            component="ul"
             sx={{
-              listStyleType: "none",
-              paddingLeft: "2rem",
-              display: "block",
+              display: "flex",
+              alignItems: "center",
+              gap: 3,
+              flexWrap: "wrap",
             }}
           >
-            <Box component="li" sx={{ display: "inline-block", marginRight: "10px" }}>
-              FOLLOW:
-            </Box>
-            <Box component="li" sx={{ display: "inline-block", marginRight: "10px" }}>
-              <MuiLink
-                href="https://github.com/gjack"
-                sx={{
-                  textDecoration: "none",
-                  color: "inherit",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  "&:hover": { textDecoration: "underline" },
-                }}
-              >
-                <GitHub fontSize="large" />
-                <Box component="span" sx={{ px: "5px" }}>
-                  GITHUB
-                </Box>
-              </MuiLink>
-            </Box>
-            <Box component="li" sx={{ display: "inline-block", marginRight: "10px" }}>
-              <MuiLink
-                href="https://twitter.com/alluneediscode"
-                sx={{
-                  textDecoration: "none",
-                  color: "inherit",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  "&:hover": { textDecoration: "underline" },
-                }}
-              >
-                <Twitter fontSize="large" />
-                <Box component="span" sx={{ px: "5px" }}>
-                  TWITTER
-                </Box>
-              </MuiLink>
-            </Box>
-            <Box component="li" sx={{ display: "inline-block", marginRight: "10px" }}>
-              <MuiLink
-                href="https://gabijack.com/rss.xml"
-                sx={{
-                  textDecoration: "none",
-                  color: "inherit",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  "&:hover": { textDecoration: "underline" },
-                }}
-              >
-                <RssFeed fontSize="large" />
-                <Box component="span" sx={{ px: "5px" }}>
-                  FEED
-                </Box>
-              </MuiLink>
-            </Box>
+            <Typography
+              sx={{
+                fontSize: "0.875rem",
+                fontWeight: 600,
+                color: "primary.main",
+                letterSpacing: "0.05em",
+              }}
+            >
+              FOLLOW
+            </Typography>
+            <MuiLink
+              href="https://github.com/gjack"
+              sx={{
+                textDecoration: "none",
+                color: "#5a6c7d",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 0.5,
+                fontSize: "0.875rem",
+                transition: "color 0.2s",
+                "&:hover": {
+                  color: "primary.main",
+                },
+              }}
+            >
+              <GitHub fontSize="small" />
+              <Box component="span">GitHub</Box>
+            </MuiLink>
+            <MuiLink
+              href="https://twitter.com/alluneediscode"
+              sx={{
+                textDecoration: "none",
+                color: "#5a6c7d",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 0.5,
+                fontSize: "0.875rem",
+                transition: "color 0.2s",
+                "&:hover": {
+                  color: "primary.main",
+                },
+              }}
+            >
+              <Twitter fontSize="small" />
+              <Box component="span">Twitter</Box>
+            </MuiLink>
+            <MuiLink
+              href="https://gabijack.com/rss.xml"
+              sx={{
+                textDecoration: "none",
+                color: "#5a6c7d",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 0.5,
+                fontSize: "0.875rem",
+                transition: "color 0.2s",
+                "&:hover": {
+                  color: "primary.main",
+                },
+              }}
+            >
+              <RssFeed fontSize="small" />
+              <Box component="span">RSS Feed</Box>
+            </MuiLink>
           </Box>
+          <Typography sx={{ fontSize: "0.875rem", color: "#5a6c7d" }}>
+            © {new Date().getFullYear()} Gabi Jack
+          </Typography>
         </Box>
-        <Box sx={{ px: "2rem" }}>© 2022 Gabi Jack</Box>
       </Box>
     </Box>
   )
