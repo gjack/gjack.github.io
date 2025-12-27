@@ -123,64 +123,70 @@ const BlogPostPage = ({ data }) => {
             tags={tags}
           />
         </Box>
-        <Box>
-          <Box sx={{ display: "flex" }}>
+        <Box sx={{ mt: 6, pt: 4, borderTop: "1px solid #e0e0e0" }}>
+          <Box sx={{ display: "flex", gap: 3, flexWrap: "wrap" }}>
             {edge.previous && (
               <MuiLink
                 component={GatsbyLink}
                 to={`/blog/${edge.previous.slug}`}
                 sx={{
-                  textAlign: "left",
-                  color: "primary.main",
-                  fontWeight: "bold",
                   textDecoration: "none",
+                  color: "primary.main",
+                  flex: "1 1 0",
+                  minWidth: { xs: "100%", sm: "0" },
+                  padding: "1.5rem",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "4px",
                   "&:hover": {
-                    color: "warning.main",
+                    "& .post-title": {
+                      color: "warning.main",
+                    },
                   },
                 }}
               >
-                <Box sx={{ display: "flex", flexDirection: "row" }}>
-                  <ArrowBack fontSize="large" />
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      mx: "1rem",
-                    }}
-                  >
-                    <Box>Previous</Box>
-                    <Box>{`${edge.previous.frontmatter.title}`}</Box>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+                  <ArrowBack sx={{ color: "secondary.main" }} />
+                  <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+                    <Typography sx={{ fontSize: "0.75rem", color: "#5a6c7d", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                      Previous
+                    </Typography>
+                    <Typography className="post-title" sx={{ fontWeight: 600, color: "primary.main", transition: "color 0.2s" }}>
+                      {edge.previous.frontmatter.title}
+                    </Typography>
                   </Box>
                 </Box>
               </MuiLink>
             )}
-            <Box sx={{ mx: "auto" }} />
             {edge.next && (
               <MuiLink
                 component={GatsbyLink}
                 to={`/blog/${edge.next.slug}`}
                 sx={{
-                  textAlign: "right",
-                  color: "primary.main",
-                  fontWeight: "bold",
                   textDecoration: "none",
+                  color: "primary.main",
+                  flex: "1 1 0",
+                  minWidth: { xs: "100%", sm: "0" },
+                  padding: "1.5rem",
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "4px",
+                  textAlign: "right",
                   "&:hover": {
-                    color: "warning.main",
+                    "& .post-title": {
+                      color: "warning.main",
+                    },
                   },
                 }}
               >
-                <Box sx={{ display: "flex", flexDirection: "row" }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      flexDirection: "column",
-                      mx: "1rem",
-                    }}
-                  >
-                    <Box>Next</Box>
-                    <Box>{`${edge.next.frontmatter.title}`}</Box>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, justifyContent: "flex-end" }}>
+                  <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5, alignItems: "flex-end" }}>
+                    <Typography sx={{ fontSize: "0.75rem", color: "#5a6c7d", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                      Next
+                    </Typography>
+                    <Typography className="post-title" sx={{ fontWeight: 600, color: "primary.main", transition: "color 0.2s" }}>
+                      {edge.next.frontmatter.title}
+                    </Typography>
                   </Box>
-                  <ArrowForward fontSize="large" />
+                  <ArrowForward sx={{ color: "secondary.main" }} />
                 </Box>
               </MuiLink>
             )}

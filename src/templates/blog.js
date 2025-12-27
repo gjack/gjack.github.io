@@ -92,87 +92,86 @@ const Blog = ({ pageContext, data }) => {
               </Box>
             ))}
           </Box>
-          <Box sx={{ display: "flex", flexDirection: "row", gap: 2, flexWrap: "wrap" }}>
+          <Box sx={{ display: "flex", flexDirection: "row", gap: 2, flexWrap: "wrap", alignItems: "center", mt: 4 }}>
             {!isFirst && (
               <MuiLink
                 component={GatsbyLink}
                 to={prevPage}
                 rel="prev"
                 sx={{
-                  textAlign: "left",
-                  color: "primary.main",
-                  fontWeight: "bold",
                   textDecoration: "none",
+                  color: "primary.main",
+                  fontWeight: "500",
                   display: "flex",
                   alignItems: "center",
-                  gap: 1,
-                  "&:visited": {
-                    color: "primary.main",
-                  },
+                  gap: 0.5,
+                  padding: "0.5rem 1rem",
+                  borderRadius: "4px",
+                  transition: "all 0.2s",
                   "&:hover": {
                     color: "warning.main",
                   },
                 }}
               >
-                <ArrowBack fontSize="large" />
-                <Box component="span">Previous Page</Box>
+                <ArrowBack fontSize="small" />
+                <Box component="span">Previous</Box>
               </MuiLink>
             )}
             {numPages > 1 &&
-              Array.from({ length: numPages }, (_, i) => (
-                <MuiLink
-                  key={`pagination-number${i + 1}`}
-                  component={GatsbyLink}
-                  to={`/blog/${i === 0 ? "" : i + 1}`}
-                  sx={{
-                    textDecoration: "none",
-                    color: "primary.main",
-                    "&:visited": {
-                      color: "primary.main",
-                    },
-                    "&:hover": {
-                      color: "warning.main",
-                    },
-                  }}
-                >
-                  <Box
+              Array.from({ length: numPages }, (_, i) => {
+                const isCurrentPage = i + 1 === currentPage;
+                return (
+                  <MuiLink
+                    key={`pagination-number${i + 1}`}
+                    component={GatsbyLink}
+                    to={`/blog/${i === 0 ? "" : i + 1}`}
                     sx={{
-                      textAlign: "center",
-                      width: "2rem",
-                      height: "2rem",
-                      fontWeight: "bold",
+                      textDecoration: "none",
+                      color: isCurrentPage ? "#ffffff" : "primary.main",
+                      backgroundColor: isCurrentPage ? "secondary.main" : "transparent",
+                      border: "1px solid",
+                      borderColor: isCurrentPage ? "secondary.main" : "#e0e0e0",
+                      width: "2.5rem",
+                      height: "2.5rem",
+                      borderRadius: "4px",
+                      fontWeight: "600",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
+                      transition: "all 0.2s",
+                      pointerEvents: isCurrentPage ? "none" : "auto",
+                      "&:hover": isCurrentPage ? {} : {
+                        borderColor: "warning.main",
+                        color: "warning.main",
+                      },
                     }}
                   >
                     {i + 1}
-                  </Box>
-                </MuiLink>
-              ))}
+                  </MuiLink>
+                );
+              })}
             {!isLast && (
               <MuiLink
                 component={GatsbyLink}
                 to={nextPage}
                 rel="next"
                 sx={{
-                  textAlign: "right",
-                  color: "primary.main",
-                  fontWeight: "bold",
                   textDecoration: "none",
+                  color: "primary.main",
+                  fontWeight: "500",
                   display: "flex",
                   alignItems: "center",
-                  gap: 1,
-                  "&:visited": {
-                    color: "primary.main",
-                  },
+                  gap: 0.5,
+                  padding: "0.5rem 1rem",
+                  borderRadius: "4px",
+                  transition: "all 0.2s",
                   "&:hover": {
                     color: "warning.main",
                   },
                 }}
               >
-                <Box component="span">Next Page</Box>
-                <ArrowForward fontSize="large" />
+                <Box component="span">Next</Box>
+                <ArrowForward fontSize="small" />
               </MuiLink>
             )}
           </Box>
