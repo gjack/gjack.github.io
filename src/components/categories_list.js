@@ -1,9 +1,8 @@
-/** @jsx jsx */
-import { jsx, Grid, Box } from "theme-ui"
-import { useStaticQuery, graphql, Link } from "gatsby"
+import React from "react"
+import { Box, Grid, Typography, Link as MuiLink } from "@mui/material"
+import { useStaticQuery, graphql, Link as GatsbyLink } from "gatsby"
 import { kebabCase } from "lodash"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faFolderOpen } from "@fortawesome/free-solid-svg-icons"
+import FolderOpen from "@mui/icons-material/FolderOpen"
 
 const CategoriesList = () => {
   const { allMdx } = useStaticQuery(graphql`
@@ -21,21 +20,18 @@ const CategoriesList = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#328cc1",
+        backgroundColor: "secondary.main",
         p: "1rem",
         borderRadius: "0.5rem",
         my: "2rem",
       }}
     >
-      <h3>
-        <FontAwesomeIcon
-          icon={faFolderOpen}
-          size={"lg"}
-          sx={{ mx: "0.5rem" }}
-        />
+      <Typography variant="h6" component="h3" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <FolderOpen fontSize="large" />
         Categories
-      </h3>
-      <ul
+      </Typography>
+      <Box
+        component="ul"
         sx={{
           listStyle: "none",
           m: 0,
@@ -43,34 +39,34 @@ const CategoriesList = () => {
           py: 3,
         }}
       >
-        <Grid gap={3} columns={[2, null, 2]}>
+        <Grid container spacing={3}>
           {categories.map((category) => (
-            <Box
-              key={category.fieldValue}
-              sx={{
-                textAlign: "center",
-                padding: "0",
-              }}
-            >
-              <li key={category.fieldValue}>
-                <Link
+            <Grid item xs={6} key={category.fieldValue}>
+              <Box
+                component="li"
+                sx={{
+                  textAlign: "center",
+                  padding: "0",
+                }}
+              >
+                <MuiLink
+                  component={GatsbyLink}
                   to={`/categories/${kebabCase(category.fieldValue)}/`}
-                  key={category.fieldValue}
                   sx={{
                     textDecoration: "none",
                     fontWeight: "bold",
-                    color: "#1d2731",
-                    ":visited": { color: "#1d2731" },
-                    ":hover": { color: "#d9b310" },
+                    color: "text.primary",
+                    "&:visited": { color: "text.primary" },
+                    "&:hover": { color: "warning.main" },
                   }}
                 >
                   {category.fieldValue}
-                </Link>
-              </li>
-            </Box>
+                </MuiLink>
+              </Box>
+            </Grid>
           ))}
         </Grid>
-      </ul>
+      </Box>
     </Box>
   )
 }

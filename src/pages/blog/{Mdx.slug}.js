@@ -1,18 +1,16 @@
-/** @jsx jsx */
-import { jsx } from "theme-ui"
-import { graphql, Link } from "gatsby"
+import React from "react"
+import { graphql, Link as GatsbyLink } from "gatsby"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import Layout from "../../components/layout"
 import { GatsbyImage, getImage, getSrc } from "gatsby-plugin-image"
 import Seo from "../../components/seo"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import {
-  faArrowLeft,
-  faArrowRight,
-  faTag,
-  faFolderOpen,
-} from "@fortawesome/free-solid-svg-icons"
-import { faClock, faCalendarAlt } from "@fortawesome/free-regular-svg-icons"
+import { Box, Typography, Link as MuiLink } from "@mui/material"
+import ArrowBack from "@mui/icons-material/ArrowBack"
+import ArrowForward from "@mui/icons-material/ArrowForward"
+import LocalOffer from "@mui/icons-material/LocalOffer"
+import FolderOpen from "@mui/icons-material/FolderOpen"
+import AccessTime from "@mui/icons-material/AccessTime"
+import CalendarToday from "@mui/icons-material/CalendarToday"
 import { kebabCase } from "lodash"
 import SharedButtons from "../../components/shared_buttons"
 
@@ -29,152 +27,165 @@ const BlogPostPage = ({ data }) => {
 
   return (
     <Layout>
-      <div
-        sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-      >
-        <article sx={{ flex: 1 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+        <Box component="article" sx={{ flex: 1 }}>
           <Seo
             title={post.frontmatter.title}
             description={post.frontmatter.description}
             image={seoImage}
             imageAlt={post.frontmatter.imageAlt}
           />
-          <h1>{post.frontmatter.title}</h1>
-          <div sx={{ textAlign: "justify" }}>
-            <div
+          <Typography variant="h1" component="h1">
+            {post.frontmatter.title}
+          </Typography>
+          <Box sx={{ textAlign: "justify" }}>
+            <Box
               sx={{
                 display: "flex",
                 flexDirection: "column",
                 marginBottom: "3rem",
               }}
             >
-              <small sx={{ fontWeight: "bold" }}>
-                <FontAwesomeIcon icon={faCalendarAlt} />
-                <span sx={{ mx: "0.5rem" }}>{post.frontmatter.date}</span>
-              </small>
-              <small>
-                <FontAwesomeIcon icon={faClock} />
-                <span sx={{ mx: "0.5rem" }}>{`${post.timeToRead} ${
+              <Typography
+                component="small"
+                sx={{ fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}
+              >
+                <CalendarToday fontSize="small" />
+                <Box component="span">{post.frontmatter.date}</Box>
+              </Typography>
+              <Typography component="small" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <AccessTime fontSize="small" />
+                <Box component="span">{`${post.timeToRead} ${
                   post.timeToRead === 1 ? "minute read" : "minutes read"
-                }`}</span>
-              </small>
-              <small>
-                <span>
+                }`}</Box>
+              </Typography>
+              <Typography component="small">
+                <Box component="span" sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
                   {post.frontmatter.categories.map((category, idx) => (
-                    <Link
+                    <MuiLink
+                      component={GatsbyLink}
                       to={`/categories/${kebabCase(category)}/`}
                       key={`${category}-${idx}`}
                       sx={{
-                        color: "#0b3c5d",
+                        color: "primary.main",
                         textDecoration: "none",
-                        ":hover": {
-                          color: "#d9b310",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 0.5,
+                        "&:hover": {
+                          color: "warning.main",
                         },
                       }}
                     >
-                      <FontAwesomeIcon icon={faFolderOpen} />
-                      <span sx={{ mx: "0.3rem" }}>{category}</span>
-                    </Link>
+                      <FolderOpen fontSize="small" />
+                      <Box component="span">{category}</Box>
+                    </MuiLink>
                   ))}
-                </span>
-              </small>
-              <small>
-                <span>
+                </Box>
+              </Typography>
+              <Typography component="small">
+                <Box component="span" sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
                   {post.frontmatter.tags.map((tag, idx) => (
-                    <Link
+                    <MuiLink
+                      component={GatsbyLink}
                       to={`/tags/${kebabCase(tag)}/`}
                       key={`${tag}-${idx}`}
                       sx={{
-                        color: "#0b3c5d",
+                        color: "primary.main",
                         textDecoration: "none",
-                        ":hover": {
-                          color: "#d9b310",
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 0.5,
+                        "&:hover": {
+                          color: "warning.main",
                         },
                       }}
                     >
-                      <FontAwesomeIcon icon={faTag} />
-                      <span sx={{ mx: "0.3rem" }}>{tag}</span>
-                    </Link>
+                      <LocalOffer fontSize="small" />
+                      <Box component="span">{tag}</Box>
+                    </MuiLink>
                   ))}
-                </span>
-              </small>
-            </div>
+                </Box>
+              </Typography>
+            </Box>
             {image && (
               <GatsbyImage image={image} alt={post.frontmatter.imageAlt} />
             )}
             <MDXRenderer>{post.body}</MDXRenderer>
-          </div>
-        </article>
-        <div sx={{ my: "2rem" }}>
+          </Box>
+        </Box>
+        <Box sx={{ my: "2rem" }}>
           <SharedButtons
             title={title}
             url={url}
             twitterHandle={twitterHandle}
             tags={tags}
           />
-        </div>
-        <div>
-          <div sx={{ display: "flex" }}>
+        </Box>
+        <Box>
+          <Box sx={{ display: "flex" }}>
             {edge.previous && (
-              <Link
+              <MuiLink
+                component={GatsbyLink}
                 to={`/blog/${edge.previous.slug}`}
                 sx={{
                   textAlign: "left",
-                  color: "#0b3c5d",
+                  color: "primary.main",
                   fontWeight: "bold",
                   textDecoration: "none",
-                  ":hover": {
-                    color: "#d9b310",
+                  "&:hover": {
+                    color: "warning.main",
                   },
                 }}
               >
-                <div sx={{ display: "flex", flexDirection: "row" }}>
-                  <FontAwesomeIcon icon={faArrowLeft} size={"lg"} />
-                  <div
+                <Box sx={{ display: "flex", flexDirection: "row" }}>
+                  <ArrowBack fontSize="large" />
+                  <Box
                     sx={{
                       display: "flex",
                       flexDirection: "column",
                       mx: "1rem",
                     }}
                   >
-                    <div>Previous</div>
-                    <div>{`${edge.previous.frontmatter.title}`}</div>
-                  </div>
-                </div>
-              </Link>
+                    <Box>Previous</Box>
+                    <Box>{`${edge.previous.frontmatter.title}`}</Box>
+                  </Box>
+                </Box>
+              </MuiLink>
             )}
-            <div sx={{ mx: "auto" }} />
+            <Box sx={{ mx: "auto" }} />
             {edge.next && (
-              <Link
+              <MuiLink
+                component={GatsbyLink}
                 to={`/blog/${edge.next.slug}`}
                 sx={{
                   textAlign: "right",
-                  color: "#0b3c5d",
+                  color: "primary.main",
                   fontWeight: "bold",
                   textDecoration: "none",
-                  ":hover": {
-                    color: "#d9b310",
+                  "&:hover": {
+                    color: "warning.main",
                   },
                 }}
               >
-                <div sx={{ display: "flex", flexDirection: "row" }}>
-                  <div
+                <Box sx={{ display: "flex", flexDirection: "row" }}>
+                  <Box
                     sx={{
                       display: "flex",
                       flexDirection: "column",
                       mx: "1rem",
                     }}
                   >
-                    <div>Next</div>
-                    <div>{`${edge.next.frontmatter.title}`}</div>
-                  </div>
-                  <FontAwesomeIcon icon={faArrowRight} size={"lg"} />
-                </div>
-              </Link>
+                    <Box>Next</Box>
+                    <Box>{`${edge.next.frontmatter.title}`}</Box>
+                  </Box>
+                  <ArrowForward fontSize="large" />
+                </Box>
+              </MuiLink>
             )}
-          </div>
-        </div>
-      </div>
+          </Box>
+        </Box>
+      </Box>
     </Layout>
   )
 }

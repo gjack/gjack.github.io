@@ -1,15 +1,13 @@
-/** @jsx jsx */
-import { jsx } from "theme-ui"
+import React from "react"
 import Layout from "../components/layout"
 import Seo from "../components/seo"
-import { graphql, Link } from "gatsby"
-import { Themed } from "@theme-ui/mdx"
-import { Image } from "theme-ui"
+import { graphql, Link as GatsbyLink } from "gatsby"
+import { Box, Typography, Link as MuiLink } from "@mui/material"
 import LogsBadge from "../images/log-management-fundamentals.png"
 import TagsList from "../components/tags_list"
 import CategoriesList from "../components/categories_list"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faClock, faCalendarAlt } from "@fortawesome/free-regular-svg-icons"
+import AccessTime from "@mui/icons-material/AccessTime"
+import CalendarToday from "@mui/icons-material/CalendarToday"
 
 // Components
 
@@ -22,16 +20,20 @@ const Tags = ({ pageContext, data }) => {
   return (
     <Layout>
       <Seo title={pageTitle} />
-      <main
+      <Box
+        component="main"
         sx={{
           display: "grid",
           gridGap: 4,
-          gridTemplateColumns: ["auto", "1fr 256px"],
+          gridTemplateColumns: { xs: "auto", sm: "1fr 256px" },
         }}
       >
-        <div sx={{ textAlign: "justify" }}>
-          <Themed.h2 sx={{ px: 3 }}>{`Posts tagged as ${tag}`}</Themed.h2>
-          <ul
+        <Box sx={{ textAlign: "justify" }}>
+          <Typography variant="h2" component="h2" sx={{ px: 3 }}>
+            {`Posts tagged as ${tag}`}
+          </Typography>
+          <Box
+            component="ul"
             sx={{
               listStyle: "none",
               m: 0,
@@ -40,63 +42,76 @@ const Tags = ({ pageContext, data }) => {
             }}
           >
             {edges.map(({ node }) => (
-              <li
+              <Box
+                component="li"
                 key={node.id}
                 sx={{
                   mb: 4,
                 }}
               >
-                <Themed.h3
+                <Typography
+                  variant="h3"
+                  component="h3"
                   sx={{
                     m: 0,
                   }}
                 >
-                  <Link
+                  <MuiLink
+                    component={GatsbyLink}
                     to={`/blog/${node.slug}`}
-                    key={node.id}
                     sx={{
                       color: "inherit",
                       textDecoration: "none",
-                      ":hover,:focus": {
-                        color: "#d9b310",
+                      "&:hover, &:focus": {
+                        color: "warning.main",
                       },
                     }}
                   >
                     {node.frontmatter.title}
-                  </Link>
-                </Themed.h3>
-                <div sx={{ display: "flex", flexDirection: "column" }}>
-                  <small sx={{ fontWeight: "bold" }}>
-                    <FontAwesomeIcon icon={faCalendarAlt} />
-                    <span sx={{ mx: "0.5rem" }}>{node.frontmatter.date}</span>
-                  </small>
-                  <small>
-                    <FontAwesomeIcon icon={faClock} />
-                    <span sx={{ mx: "0.5rem" }}>{`${node.timeToRead} ${
+                  </MuiLink>
+                </Typography>
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <Typography
+                    component="small"
+                    sx={{ fontWeight: "bold", display: "flex", alignItems: "center", gap: 1 }}
+                  >
+                    <CalendarToday fontSize="small" />
+                    <Box component="span">{node.frontmatter.date}</Box>
+                  </Typography>
+                  <Typography component="small" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    <AccessTime fontSize="small" />
+                    <Box component="span">{`${node.timeToRead} ${
                       node.timeToRead === 1 ? "minute" : "minutes"
-                    }`}</span>
-                  </small>
-                </div>
-                <Themed.p>{node.excerpt}</Themed.p>
-              </li>
+                    }`}</Box>
+                  </Typography>
+                </Box>
+                <Typography component="p">{node.excerpt}</Typography>
+              </Box>
             ))}
-          </ul>
-        </div>
-        <aside>
+          </Box>
+        </Box>
+        <Box component="aside">
           <CategoriesList />
           <TagsList />
-          <a href="https://www.credly.com/badges/c654ccd6-00e5-4417-bbc2-06ef46429db4/public_url">
-            <Image
-            src={LogsBadge}
-            alt={"Datadog Logs Management Badge"}
-            sx={{
-              padding: "5px",
-              marginTop: "3rem",
-            }}
+          <Box
+            component="a"
+            href="https://www.credly.com/badges/c654ccd6-00e5-4417-bbc2-06ef46429db4/public_url"
+            sx={{ display: "block" }}
+          >
+            <Box
+              component="img"
+              src={LogsBadge}
+              alt="Datadog Logs Management Badge"
+              sx={{
+                padding: "5px",
+                marginTop: "3rem",
+                maxWidth: "100%",
+                height: "auto",
+              }}
             />
-        </a>
-        </aside>
-      </main>
+          </Box>
+        </Box>
+      </Box>
     </Layout>
   )
 }

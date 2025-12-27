@@ -1,9 +1,8 @@
-/** @jsx jsx */
-import { jsx, Grid, Box } from "theme-ui"
-import { useStaticQuery, graphql, Link } from "gatsby"
+import React from "react"
+import { Box, Grid, Typography, Link as MuiLink } from "@mui/material"
+import { useStaticQuery, graphql, Link as GatsbyLink } from "gatsby"
 import { kebabCase } from "lodash"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTags } from "@fortawesome/free-solid-svg-icons"
+import LocalOfferOutlined from "@mui/icons-material/LocalOfferOutlined"
 
 const TagsList = () => {
   const { allMdx } = useStaticQuery(graphql`
@@ -21,17 +20,18 @@ const TagsList = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#328cc1",
+        backgroundColor: "secondary.main",
         p: "1rem",
         borderRadius: "0.5rem",
         my: "2rem",
       }}
     >
-      <h3>
-        <FontAwesomeIcon icon={faTags} size={"lg"} sx={{ mx: "0.5rem" }} />
+      <Typography variant="h6" component="h3" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <LocalOfferOutlined fontSize="large" />
         Tags
-      </h3>
-      <ul
+      </Typography>
+      <Box
+        component="ul"
         sx={{
           listStyle: "none",
           m: 0,
@@ -39,34 +39,34 @@ const TagsList = () => {
           py: 3,
         }}
       >
-        <Grid gap={3} columns={[2, null, 2]}>
+        <Grid container spacing={3}>
           {tags.map((tag) => (
-            <Box
-              key={tag.fieldValue}
-              sx={{
-                textAlign: "center",
-                padding: "0",
-              }}
-            >
-              <li key={tag.fieldValue}>
-                <Link
+            <Grid item xs={6} key={tag.fieldValue}>
+              <Box
+                component="li"
+                sx={{
+                  textAlign: "center",
+                  padding: "0",
+                }}
+              >
+                <MuiLink
+                  component={GatsbyLink}
                   to={`/tags/${kebabCase(tag.fieldValue)}/`}
-                  key={tag.fieldValue}
                   sx={{
                     textDecoration: "none",
                     fontWeight: "bold",
-                    color: "#1d2731",
-                    ":visited": { color: "#1d2731" },
-                    ":hover": { color: "#d9b310" },
+                    color: "text.primary",
+                    "&:visited": { color: "text.primary" },
+                    "&:hover": { color: "warning.main" },
                   }}
                 >
                   {tag.fieldValue}
-                </Link>
-              </li>
-            </Box>
+                </MuiLink>
+              </Box>
+            </Grid>
           ))}
         </Grid>
-      </ul>
+      </Box>
     </Box>
   )
 }
