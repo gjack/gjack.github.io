@@ -1,14 +1,13 @@
-/** @jsx jsx */
-import { jsx, Grid, Box } from "theme-ui"
-import { useStaticQuery, graphql, Link } from "gatsby"
+import React from "react"
+import { Box, Typography, Link as MuiLink } from "@mui/material"
+import { useStaticQuery, graphql, Link as GatsbyLink } from "gatsby"
 import { kebabCase } from "lodash"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faTags } from "@fortawesome/free-solid-svg-icons"
+import LocalOfferOutlined from "@mui/icons-material/LocalOfferOutlined"
 
 const TagsList = () => {
   const { allMdx } = useStaticQuery(graphql`
     {
-      allMdx {
+      allMdx(filter: { frontmatter: { draft: { eq: false } } }) {
         group(field: frontmatter___tags) {
           totalCount
           fieldValue
@@ -21,52 +20,59 @@ const TagsList = () => {
   return (
     <Box
       sx={{
-        backgroundColor: "#328cc1",
-        p: "1rem",
-        borderRadius: "0.5rem",
+        backgroundColor: "#f0f7fb",
+        p: "1.5rem",
+        borderRadius: "8px",
         my: "2rem",
+        boxShadow: "0 2px 8px rgba(50, 140, 193, 0.08)",
+        borderTop: "3px solid",
+        borderTopColor: "secondary.main",
       }}
     >
-      <h3>
-        <FontAwesomeIcon icon={faTags} size={"lg"} sx={{ mx: "0.5rem" }} />
+      <Typography variant="h6" component="h3" sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2, color: "primary.main", fontWeight: "bold" }}>
+        <LocalOfferOutlined fontSize="medium" />
         Tags
-      </h3>
-      <ul
+      </Typography>
+      <Box
+        component="ul"
         sx={{
           listStyle: "none",
           m: 0,
-          px: 2,
-          py: 3,
+          p: 0,
+          display: "flex",
+          flexWrap: "wrap",
+          gap: 2,
         }}
       >
-        <Grid gap={3} columns={[2, null, 2]}>
-          {tags.map((tag) => (
-            <Box
-              key={tag.fieldValue}
+        {tags.map((tag) => (
+          <Box
+            component="li"
+            key={tag.fieldValue}
+            sx={{
+              padding: "0",
+            }}
+          >
+            <MuiLink
+              component={GatsbyLink}
+              to={`/tags/${kebabCase(tag.fieldValue)}/`}
               sx={{
-                textAlign: "center",
-                padding: "0",
+                textDecoration: "none",
+                fontWeight: "500",
+                color: "secondary.main",
+                fontSize: "0.9rem",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 0.5,
+                "&:visited": { color: "secondary.main" },
+                "&:hover": { color: "warning.main", textDecoration: "underline" },
               }}
             >
-              <li key={tag.fieldValue}>
-                <Link
-                  to={`/tags/${kebabCase(tag.fieldValue)}/`}
-                  key={tag.fieldValue}
-                  sx={{
-                    textDecoration: "none",
-                    fontWeight: "bold",
-                    color: "#1d2731",
-                    ":visited": { color: "#1d2731" },
-                    ":hover": { color: "#d9b310" },
-                  }}
-                >
-                  {tag.fieldValue}
-                </Link>
-              </li>
-            </Box>
-          ))}
-        </Grid>
-      </ul>
+              <LocalOfferOutlined sx={{ fontSize: "1rem" }} />
+              {tag.fieldValue}
+            </MuiLink>
+          </Box>
+        ))}
+      </Box>
     </Box>
   )
 }

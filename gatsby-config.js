@@ -26,14 +26,17 @@ module.exports = {
               maxWidth: 600,
             },
           },
+          {
+            resolve: `gatsby-remark-prismjs`,
+            options: {
+              classPrefix: "language-",
+              inlineCodeMarker: null,
+              aliases: {},
+              showLineNumbers: false,
+              noInlineHighlight: false,
+            },
+          },
         ],
-      },
-    },
-    {
-      resolve: "gatsby-plugin-theme-ui",
-      options: {
-        preset: "@theme-ui/preset-funk",
-        prismPreset: "prism-okaidia",
       },
     },
     "gatsby-plugin-image",

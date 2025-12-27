@@ -27,21 +27,21 @@ Most of the installation went smoothly, as predicted by the guides.
 The only one hiccup I found was when attempting to create a new Rails application using MySQL for the database.
 Bundler failed to install the mysql2 gem.
 
-```
+```bash
 An error occurred while installing mysql2 (0.5.3), and Bundler cannot continue.
 Make sure that `gem install mysql2 -v '0.5.3' --source 'https://rubygems.org/'` succeeds before bundling.
 ```
 
 Examining the error closely, it appeared to indicate that the library zstd was not being found. 
 
-```
+```bash
 ld: library not found for -lzstd
 ```
 
 In my case, it wasn't so much that the library was not installed, but it seems it was not being linked from the correct path, 
 so the solution was to install mysql2 indicating the correct path to the library.
 
-```
+```bash
 gem install mysql2 -v '0.5.3' -- --with-opt-dir=$(brew --prefix openssl) --with-ldflags=-L/opt/homebrew/Cellar/zstd/1.5.0/lib
 ```
 

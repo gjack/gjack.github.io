@@ -15,7 +15,7 @@ component. Lastly, I setup a page that used Redis to increment a counter, just t
 
 By then, my Dockerfile was looking like this:
 
-```
+```dockerfile
 FROM ruby:2.7
 
 # Allow apt to work with http-based resources
@@ -44,10 +44,10 @@ ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["bin/rails", "s", "-b", "0.0.0.0"]
 ```
 
-The docker-entrypoint.sh file includes commands that will be run prior to launching the application, 
+The docker-entrypoint.sh file includes commands that will be run prior to launching the application,
 and it had the following contents.
 
-```
+```bash
 #!/bin/sh
 
 set -e
@@ -60,10 +60,10 @@ fi
 exec "$@"
 ```
 
-My docker-compose.yml file had also grown to include a service for a postgres database and a volume to cache the gems. 
+My docker-compose.yml file had also grown to include a service for a postgres database and a volume to cache the gems.
 I had extracted the environment variables into a couple of .env files.
 
-```
+```yaml
 version: '3'
 
 services:
@@ -131,10 +131,10 @@ you can use an existing image from Docker hub, or you can use a repository in Gi
 As a first attempt, I tried using the production image I had pushed to Docker hub previously, but there were 
 a few errors in my image that I couldn't figure out, and the build kept failing. My next attempt was to use the Github repo of my sample application as the source. DigitalOcean detected 
 there was a Dockerfile in there, and used it to build an image and deploy a dockerised Rails application. For this to work, however, I had to rename the production Dockerfile.prod I had created previously to simply Dockerfile, 
-so DigitalOcean would use that one, instead of the one I had for development. There were subtle differences between those two Dockerfile files; mainly the 
+so DigitalOcean would use that one, instead of the one I had for development. There were subtle differences between those two Dockerfile files; mainly the
 addition of an instruction to precompile assets, just before the ENTRYPOINT.
 
-```
+```dockerfile
 RUN bin/rails assets:precompile
 ```
 
@@ -146,10 +146,10 @@ I should mention I had previously modified the docker-entrypoint.sh file to incl
 really a good idea, since it doesn't scale well. He explains how to create a migrator service to take care of this, instead, although since my deployment process ended up substantially different from 
 his, I wasn't really sure how to adapt to my particular case.
 
-Below is a screenshot of all environment variables for my deployed application, which you will also need to provide. Notice that the value of REDIS_URL corresponds to the connection string to the 
-Redis cluster that was created by DigitalOcean. The SECRET_KEY_BASE I generated in advance by running the command 
+Below is a screenshot of all environment variables for my deployed application, which you will also need to provide. Notice that the value of REDIS_URL corresponds to the connection string to the
+Redis cluster that was created by DigitalOcean. The SECRET_KEY_BASE I generated in advance by running the command
 
-```
+```bash
 docker-compose​​ ​​exec​​ ​​web​​ ​​bin/rails​​ ​​secret
 ```
 
