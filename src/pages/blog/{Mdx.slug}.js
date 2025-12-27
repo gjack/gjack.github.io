@@ -211,7 +211,10 @@ export const query = graphql`
       timeToRead
       slug
     }
-    allMdx(sort: { fields: frontmatter___date, order: ASC }) {
+    allMdx(
+      sort: { fields: frontmatter___date, order: ASC }
+      filter: { frontmatter: { draft: { eq: false } } }
+    ) {
       edges {
         next {
           slug
