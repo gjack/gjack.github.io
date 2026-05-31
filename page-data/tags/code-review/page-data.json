@@ -1,0 +1,5 @@
+{
+    "componentChunkName": "component---src-templates-tags-js",
+    "path": "/tags/code-review/",
+    "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"8bc48193-2ba7-5463-9edb-0f5e3a910bb1","slug":"2026-05-30-outsmarting-github-copilot","frontmatter":{"title":"I Tried to Outsmart Copilot. It Made Me a Better Developer.","date":"30 May, 2026"},"timeToRead":3,"excerpt":"When my team enabled Copilot's automated code review, I thought it would be a time-saver. It wasn't. At least not at first. The pattern was the same …"}}]}},"pageContext":{"tag":"code review"}},
+    "staticQueryHashes": ["2201243204","2484670584","469546184"]}
