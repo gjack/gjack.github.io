@@ -1,0 +1,68 @@
+---
+title:  I Tried to Outsmart Copilot. It Made Me a Better Developer.
+date: 2026-05-30
+tags: [programming, code review, AI, Claude code]
+categories: []
+draft: false
+---
+
+When my team enabled Copilot's automated code review, I thought it would be a time-saver. It wasn't. At least not at first.
+
+The pattern was the same every time: I'd finish a feature, feel good about it, open a pull request, and within seconds Copilot would leave eight, nine, ten comments. Fine. I'd work through them, push again, and get a fresh batch. The frustration wasn't that the feedback was wrong. It was the whiplash. The feeling of constantly reacting, never getting ahead of it. It started to feel less like a code review and more like a game I kept losing.
+
+So I decided to stop playing defense.
+
+---
+
+## Building the Cheat Sheet
+
+My first instinct was simple: if I knew what Copilot was going to say, I could fix it first. I started keeping notes. After a few weeks I had a mental model of the categories: N+1 queries, missing authorization checks, edge cases on nil returns, that kind of thing. But a mental model isn't something you can run.
+
+I use Claude for a lot of my day-to-day development, and it has a feature called [skills](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview), essentially a markdown file that instructs Claude how to approach a specific task. I started writing one for pre-PR review.
+
+The skill works by diffing the current branch against a base ref, scanning the changed files, and running through a checklist of categories: multi-tenancy violations, N+1 queries, authorization gaps, missing edge case handling, anti-patterns, test coverage, and more. It reads the project's actual conventions first: which auth library you're using, whether you have soft deletes, how your background jobs are named. That way it gives you feedback that's relevant to *your* codebase, not a generic Rails app.
+
+The output is a triage list: 🔴 must fix before PR, 🟡 should fix, 🟢 consider.
+
+---
+
+## The Iteration Loop
+
+The first version wasn't very good. It would surface things Copilot didn't care about and miss things it consistently flagged. So I ran them side by side, my skill then Copilot, and treated the gaps as bugs.
+
+Over several PRs, patterns emerged. Copilot was especially aggressive about:
+
+- N+1s in serializers and presenters, not just controllers
+- Strong parameter gaps, including nested attributes
+- `fetch` calls in React that didn't check `response.ok`
+- Async state race conditions: snapshotting state before an `await`, then clearing it unconditionally on success, wiping entries that arrived during the in-flight request
+
+That last one, I'll be honest, I had to look it up the first time Copilot flagged it. Once I understood it, I started seeing it everywhere. The skill now has an explicit check for it:
+
+> **When a function snapshots state before an `await`, then clears state unconditionally on success, it wipes entries that were queued during the in-flight request. The correct pattern is a functional update that removes only the snapshotted entries.**
+
+I never would have written that check if Copilot hadn't flagged the pattern three times in two weeks.
+
+---
+
+## What Actually Changed
+
+Here's the unexpected part: I thought the goal was to silence Copilot. That stopped being the goal pretty quickly.
+
+Running the skill before opening a PR became a habit, and the habit changed how I write code. I started thinking about nil guards before I finished the method. I started thinking about race conditions before I'd even wired up the submit button. The skill didn't just catch mistakes. It made the checklist part of how I think.
+
+Copilot still leaves comments. But now it's usually one or two things I may have missed or consciously decided to defer, not a wall of feedback I didn't see coming. The conversation feels different. More like a second opinion than a verdict.
+
+---
+
+## The Skill Is Still a Work in Progress
+
+It's not perfect. It occasionally surfaces false positives, particularly around performance concerns where it can't know the actual query plan or data volume. I've tried to bake in some conservatism there: performance findings that can't be verified structurally go in the 🟢 category with language like "worth profiling against a large tenant before merging," rather than being flagged as blockers.
+
+It also requires reading the project before reviewing, which means the first run on a new codebase takes a moment longer while it scans the auth layer, Gemfile, and job conventions. That's intentional. I'd rather have relevant feedback than fast feedback.
+
+The skill lives in our company's internal Claude marketplace, so I can't share it directly. But if you use Claude Code, writing something like it isn't as hard as it sounds. Start with the categories that hurt you most and go from there.
+
+---
+
+The irony of the whole thing is that Copilot, the tool I was trying to get around, ended up teaching me most of what the skill knows. I just gave it a better memory than I have.
