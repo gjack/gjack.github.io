@@ -1,0 +1,78 @@
+---
+title: I Started a Mistral Tutorial. It Ended with My Voice Speaking French.
+date: 2026-06-06
+tags: [AI, Mistral, voice, machine learning]
+categories: []
+draft: false
+---
+
+I've been dabbling with [Mistral AI](https://mistral.ai/) for a couple of weeks. Not building anything yet, but just going through tutorials, running exercises, trying to understand what the platform actually does well. I wasn't expecting to be impressed. I was.
+
+---
+
+## Starting Point
+
+The first exercise was intentionally silly: run the same absurd prompt through three different models. Small, Medium, Large. See how they differ.
+
+The prompt (two medieval peasants arguing about whether the Earth is round, one of whom kept bringing up his goat) was beside the point. A frivolous task so you could pay attention to the models instead of the content.
+
+What struck me wasn't the quality gap. (Large is noticeably better; Medium is nearly indistinguishable from it for most things; Small is surprisingly capable and very fast.) It was a parameter I hadn't expected: `reasoning_effort`. With a single flag (none, low, or high) you can tell the model how hard to think. On a simple factual question, it makes almost no difference. On a logic puzzle, the gap is significant. One model, one API call, adjustable depth.
+
+Claude has something similar: extended thinking, where you set a token budget for how much internal reasoning the model does before it answers. The mechanics differ (a token budget gives finer control than a three-way enum), but the underlying idea is the same: make reasoning depth a first-class parameter rather than something you try to coax out of a prompt. Seeing it in Mistral made me realize how much I'd been taking that for granted in Claude.
+
+---
+
+## What It Sees
+
+A few exercises in, things got more interesting.
+
+Pixtral, Mistral's vision capability available through the same client you use for text, can take an image and reason about it. I tried a simple test: an image of a math problem. "What does this image show? If it contains a math problem, solve it." It did. Then I tried a synthetic image of handwritten-style notes about photosynthesis: "Summarize the key concepts in language a child could understand." It did that too.
+
+Claude does this too, with nearly identical mechanics: image content blocks in the same messages array you use for text. I use it regularly enough that I'd stopped thinking about it as a feature. What the Mistral exercise made me notice was the pattern itself becoming standard. A couple of years ago, sending an image to a language model and getting a reasoned response felt like a demonstration. Now it's just how these APIs work. Whether you're in Claude or Mistral, vision isn't a separate system you have to integrate. It's just there, waiting for you to have something worth asking about.
+
+---
+
+## Where It Gets Strange
+
+Then came Voxtral.
+
+Voxtral is Mistral's text-to-speech model. The basics are straightforward: give it text, get back audio. But the library of voices is organized by name *and* emotion. Oliver - Cheerful. Jane - Sad. Paul - Angry.
+
+I ran the same exercise three times. Oliver delivering an optimistic introduction. Jane saying "I tried my best, but sometimes things just don't work out the way you hope." Paul: "I told you three times already! The deadline was yesterday and nobody even started!"
+
+Same model. Completely different characters. That sounds simple on paper, but there's a gap between reading that it's possible and actually hearing the resignation in Jane's voice, the edge in Paul's. I sat with that for longer than I expected.
+
+This is also where the comparison with Claude stops being symmetrical. Claude is text in, text out. If you want speech output from a Claude-powered application, you wire in a separate TTS service. It works, but it's a seam you have to manage. Here there's no seam: same client, same SDK, audio as a first-class response type. That difference matters less in a tutorial and more when you're actually trying to build something.
+
+---
+
+## The Moment That Really Impressed Me
+
+Voice cloning.
+
+You give Voxtral a reference audio file; any audio file, as short as three seconds. Then you give it text. It synthesizes that text in the voice from the reference clip.
+
+I ran the demo. Fine. Interesting. Then I noticed the next part of the script: cross-lingual cloning. Same reference audio. Different text, now in French.
+
+The output was the reference voice, speaking French, with natural French cadence.
+
+Three seconds of audio. A language the speaker never said a word of in the clip. And the output wasn't robotic. It wasn't obviously synthetic. It was fluent in a way that made me stop and listen to it twice.
+
+I don't know exactly what to do with that yet. I know it has real applications: translation tools, accessibility, localization, content at scale. I know it also raises questions I don't have clean answers to. But it stopped me the way few technical demos do, which is to say: it felt like something that will seem obvious in retrospect, and doesn't quite yet.
+
+---
+
+## What's Next
+
+
+Three ideas I keep coming back to, all of which would have seemed out of reach before I understood what these models can actually do:
+
+A tool to help read and interpret knitting patterns. Knitting charts are a mix of symbols, abbreviations, and diagrams that require a kind of translation: from visual notation into step-by-step instructions. Vision plus language understanding seems like a natural fit for this, and I've wanted something like it for years.
+
+A closed captioning and subtitle tool. Transcribe audio, clean it up, add timecodes. Possibly translate. The voice capabilities I explored are mostly on the text-to-speech side, but the transcription side of Voxtral opens the same door from the other direction.
+
+A manga translation tool. Take a scan, extract the text from speech bubbles using vision, translate it, and render it back in place. Every piece of that is something Mistral can do. Whether it can do all of them together well enough to be useful is the part I haven't tested yet.
+
+None of these have a concrete plan behind them. But before this tutorial I wasn't thinking in terms of "what could I build" — I was thinking in terms of "is this worth learning." That question feels answered.
+
+The next one is more interesting.
