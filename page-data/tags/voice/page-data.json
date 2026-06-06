@@ -1,0 +1,5 @@
+{
+    "componentChunkName": "component---src-templates-tags-js",
+    "path": "/tags/voice/",
+    "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"cb7d26e3-c28a-5c0a-a659-83f90d04bd15","slug":"2026-06-06-first-steps-with-mistral","frontmatter":{"title":"I Started a Mistral Tutorial. It Ended with My Voice Speaking French.","date":"06 June, 2026"},"timeToRead":4,"excerpt":"I've been dabbling with  Mistral AI  for a couple of weeks. Not building anything yet, but just going through tutorials, running exercises, trying to…"}}]}},"pageContext":{"tag":"voice"}},
+    "staticQueryHashes": ["2201243204","2484670584","469546184"]}
