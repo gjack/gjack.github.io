@@ -49,10 +49,10 @@ const Layout = ({ children }) => {
       >
         <Toolbar
           sx={{
-            maxWidth: "container",
+            maxWidth: "lg",
             width: "100%",
             mx: "auto",
-            px: 3,
+            px: { xs: 2, sm: 3, md: 4 },
           }}
         >
           <Typography
@@ -168,9 +168,11 @@ const Layout = ({ children }) => {
       <Box
         component="main"
         sx={{
-          maxWidth: "container",
-          mx: "2rem",
-          padding: "1rem",
+          width: "100%",
+          maxWidth: "lg",
+          mx: "auto",
+          px: { xs: 2, sm: 3, md: 4 },
+          py: "1rem",
           textAlign: "center",
           flex: "1 1 auto",
         }}
@@ -187,12 +189,16 @@ const Layout = ({ children }) => {
           display: "flex",
           flexDirection: "column",
           flexWrap: "wrap",
-          p: 3,
+          py: 3,
+          px: { xs: 2, sm: 3, md: 4 },
           minHeight: "15%",
         }}
       >
         <Box
           sx={{
+            width: "100%",
+            maxWidth: "lg",
+            mx: "auto",
             display: "flex",
             flexDirection: { xs: "column", sm: "row" },
             alignItems: { xs: "flex-start", sm: "center" },
