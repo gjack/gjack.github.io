@@ -9,7 +9,9 @@
   ],
   "homepage": "gjack.github.io",
   "scripts": {
+    "predevelop": "mkdir -p .cache",
     "develop": "gatsby develop",
+    "prestart": "mkdir -p .cache",
     "start": "gatsby develop",
     "build": "gatsby build",
     "serve": "gatsby serve",
