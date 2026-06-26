@@ -1,0 +1,5 @@
+{
+    "componentChunkName": "component---src-templates-tags-js",
+    "path": "/tags/ocr/",
+    "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"85983a41-a504-57c0-8385-5f6327fb821c","slug":"2026-06-26-knitting-assistant-pattern-ingestion/","frontmatter":{"title":"Building a Knitting Pattern Assistant, Part 1: Getting the PDF In","date":"26 June, 2026"},"timeToRead":7,"excerpt":"Knitting is one of my favorite hobbies. I've been doing it long enough to accumulate a library of patterns, mostly from  Knitpicks , my favorite yarn…"}}]}},"pageContext":{"tag":"OCR"}},
+    "staticQueryHashes": ["2201243204","2484670584","469546184"]}
