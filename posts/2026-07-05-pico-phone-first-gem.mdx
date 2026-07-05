@@ -1,0 +1,201 @@
+---
+title: I Just Published My First Ruby Gem!
+date: 2026-07-05
+tags: [Ruby, C++, open source, gems, libphonenumber]
+categories: []
+draft: false
+---
+
+I'm happy to report that `gem install pico_phone` works now. That sentence took eighteen months to become true.
+
+---
+
+## The Problem That Started It
+
+At work, my team validates and parses phone numbers using [Phonelib](https://github.com/daddyz/phonelib). It's a solid gem, but it does all of its work in Ruby: regex matching, data table lookups, the works. At scale, that's slow. The actual number-parsing logic it's built on, Google's [libphonenumber](https://github.com/google/libphonenumber), is a C++ library. Phonelib (and libraries like it) reimplement its behavior in Ruby rather than calling into it directly.
+
+We looked at [mini_phone](https://github.com/daddyz/mini_phone), which *does* wrap the C++ library as a native extension. Faster, in principle. But it didn't expose enough of libphonenumber's surface area for what we needed, so it wasn't a real option.
+
+That left an obvious, mildly ridiculous idea: what if I just wrapped libphonenumber myself?
+
+I've liked C and C++ since college. Not in a nostalgic way, more that I still think they're some of the most powerful, useful, multipurpose languages around, and I don't get many excuses to write them anymore. Looking into what it would take to bind a C++ library into Ruby, I found [Rice](https://github.com/ruby-rice/rice), a library that makes writing Ruby/C++ extensions look almost reasonable. That was enough to pull me in.
+
+---
+
+## It Started During a Free Week Back in 2024
+
+My employer runs something called "free week" a few times a year, two weeks where you can work on anything that isn't your assigned work but strikes your fancy. Some genuinely great internal tools have come out of free weeks. Mine, in December 2024, went to pico_phone.
+
+The name is a small joke stacked on a coincidence. "Pico" is smaller than "mini," so it reads as a nod to mini_phone, the gem we'd ruled out. But Pico also happens to be my employer's mascot, and at the time I half expected this to end up as an internal company gem rather than something I'd publish myself. The name stuck around even after those plans changed.
+
+The early commits tell the story of someone figuring out Rice in real time: exposing a couple of instance variable accessors first, then a `valid?` method, then wrapping the C++ `PhoneNumber` class itself, then discovering the wrap-the-class approach didn't work and redefining it as a proper Ruby class instead. By the end of the two weeks I had a working extension with parsing, validation, and basic formatting.
+
+Rice only solves the C++/Ruby boundary, though. None of the usual gem-development comforts come with it, so a decent chunk of that first week went into wiring up the scaffolding around it. `Rake::ExtensionTask` (from rake-compiler) hooks compilation into the Rake task graph, so `rake spec` recompiles the extension before RSpec ever loads it, which matters a lot when a C++ change and a spec change land in the same commit and you don't want to debug a spec failure that's actually a stale binary. And `bin/console` recompiles, requires the gem, and drops into a Pry session, so I could poke at a freshly built extension by hand instead of writing a throwaway spec every time I wanted to check what a method actually returned.
+
+That scaffolding is also, in hindsight, most of what made picking the project back up eighteen months later tractable at all. At the time, though, it just felt like a solid foundation, the kind of thing you assume you'll circle back to in a few weeks. Then free week ended, real work resumed, and pico_phone sat untouched for the next year and a half.
+
+---
+
+## How Rice Actually Binds C++ to Ruby
+
+Rice's pitch is that writing a Ruby extension shouldn't mean writing [Ruby's C extension API](https://docs.ruby-lang.org/en/master/extension_rdoc.html) by hand. Instead of the usual `Init_foo` full of `rb_define_method` calls and manual `VALUE` juggling, you get a fluent, C++-flavored builder:
+
+```cpp
+define_module("PicoPhone")
+  .define_singleton_method("valid?", &pico_phone_is_valid_for_default_country)
+  .define_singleton_method("possible_countries", &pico_phone_possible_countries_for_string)
+  // ...
+
+rb_cPhoneNumber = define_class_under(rb_mPicoPhone, "PhoneNumber")
+  .define_method("valid?", &is_parsed_phone_number_valid)
+  .define_method("national", &format_parsed_number_national)
+  .define_method("possible_countries", &parsed_number_possible_countries)
+  // ...
+```
+
+Each call to `define_method` takes a plain C++ function pointer. Rice inspects its signature and generates the argument-marshaling code for you: a C++ `std::string` argument becomes a Ruby `String` becomes a `std::string` again on the way in, and a returned `bool` becomes `true`/`false` on the way out. Rice also ships its own C++-flavored wrapper types, `Object`, `String`, `Array`, that behave like their Ruby counterparts but convert implicitly at the boundary. Most of pico_phone's ~40 methods are exactly this: a thin C++ function that calls one or two libphonenumber methods and returns a value Rice already knows how to convert.
+
+Where it gets more hands-on is the `PhoneNumber` class itself. Under the hood, each Ruby `PhoneNumber` instance wraps a heap-allocated libphonenumber protobuf struct, and that struct has its own C++ construction and destruction rules that don't map onto Rice's own class-wrapping machinery cleanly. So that one piece drops down to Ruby's raw C extension API: a custom `rb_data_type_t` describing how to free the struct, an `alloc` function that placement-news a `PhoneNumber` into memory Ruby owns, and `TypedData_Wrap_Struct` to hand that pointer to Ruby as an opaque, garbage-collectible object:
+
+```cpp
+void phone_number_free(void *data) {
+  PhoneNumber *phone_number = static_cast<PhoneNumber *>(data);
+  phone_number->~PhoneNumber();  // explicit destructor call, since placement new skips `delete`
+  xfree(data);
+}
+
+VALUE rb_phone_number_alloc(VALUE self) {
+  void *phone_number_data = ALLOC(PhoneNumber);
+  PhoneNumber *phone_number = new (phone_number_data) PhoneNumber();  // placement new
+  return TypedData_Wrap_Struct(self, &phone_number_type, phone_number);
+}
+```
+
+Every instance method then starts by unwrapping that pointer with `TypedData_Get_Struct` before it can call into libphonenumber at all. It's more ceremony than the `define_method` calls above, but it's ceremony Rice doesn't have an opinion about: it's really about managing a C++ object's lifetime inside Ruby's garbage collector, not about calling a function.
+
+The two layers coexist in the same file, and that's exactly the seam bug two (below) lived in. Rice's automatic conversion is what makes the `define_method` layer painless, but the moment you drop into the raw C API to do something Rice doesn't cover, that safety net is gone. You're back to knowing, by hand, what a bare `VALUE` actually means.
+
+---
+
+## Picking It Back Up
+
+I came back to it this past June, mostly on a whim, and ended up going all in over about a week. Same core idea, but this time I actually finished it.
+
+The first pass was bug hunting, and the bugs were the kind that only show up when you're gluing two type systems together.
+
+**Bug one:** a cleanup function that nulls out cached values after a failed parse was writing to the wrong object. Every `rb_iv_set` call used the class object instead of `self`, meaning every failed parse silently mutated global class state instead of the instance. It "worked" by accident, since memoization never triggered and every method just recomputed from scratch. But it was leaking junk onto the class on every failure.
+
+**Bug two** was the more interesting one:
+
+```cpp
+// before
+return rb_iv_set(self, "@country_code", code);  // code is a raw C int
+
+// after
+return rb_iv_set(self, "@country_code", INT2FIX(code));
+```
+
+`rb_iv_set` expects a Ruby-encoded `VALUE`, not a plain C int. The original tests passed anyway, by pure accident: Rice 4 automatically runs `LONG2NUM` on anything a function declares as returning `VALUE`, so the wrong bit pattern got silently corrected on the way out even though the *cached* ivar was garbage. Fixing the ivar broke the return value, which only got fixed once I changed the function's return type from `VALUE` to `Object`, Rice's signal for "this is already a boxed Ruby value, stop converting it." I now think of this as the central Rice 4 lesson: `VALUE` doesn't mean "Ruby object," it means "integer I will `LONG2NUM` for you."
+
+**Bug three** was a hardcoded 10-digit US formatting pattern that happened to also produce correct results for Brazilian numbers by coincidence, and returned an empty string for everything else. `GetNationalSignificantNumber` replaced it and about thirty lines of pattern-matching scaffolding disappeared with it.
+
+---
+
+## Actually Using the C++ Library
+
+Once the bugs were fixed, the fun part started: libphonenumber does a lot more than parse-and-validate, and pico_phone didn't expose any of it yet.
+
+The one I was proudest of is `possible_countries` / `valid_countries`. A calling code isn't 1:1 with a country: `+1` covers the US, Canada, and about twenty Caribbean territories; `+7` covers both Russia and Kazakhstan. `GetRegionCodesForCountryCallingCode` returns every region sharing a code, and filtering that list with `IsValidNumberForRegion` tells you which ones a given number could actually belong to:
+
+```ruby
+PicoPhone.possible_countries("+15102745656")  # => ["US"]
+PicoPhone.possible_countries("+78005553535")  # => ["RU", "KZ"]
+```
+
+I also added short number support (`emergency_number?`, `short_number_cost`) via libphonenumber's separate `ShortNumberInfo` class, since regular parsing chokes on "911" and needs its own code path entirely. And `possible_with_reason`, which turns a plain boolean into a symbol explaining *why* a number isn't possible (`:too_short`, `:too_long`, `:invalid_country_code`), which turned out to be much more useful for form validation than I expected.
+
+One method I deliberately didn't build: an as-you-type formatter. libphonenumber supports it, and I could have wrapped it. But real-time formatting on every keystroke means a server round trip per character, and the JS port already does this client-side at zero latency. Not every capability a library exposes is one you should ship.
+
+---
+
+## Getting It Gem-Shaped
+
+Working code and a publishable gem are different things. YARD stubs, for one: since every method is defined in C++ via Rice, tools like Solargraph can't introspect any of it. Typing `phone.` in an editor gave you nothing. The fix is a file that's never actually loaded at runtime, existing only to give IDEs something to read:
+
+```ruby
+# Not loaded at runtime, exists only for YARD and IDE tooling
+module PicoPhone
+  class PhoneNumber
+    # @return [Symbol] :is_possible, :too_short, :too_long, ...
+    def possible_with_reason; end
+  end
+end
+```
+
+Then CI, across Ubuntu and macOS, across Ruby 3.1 through 3.4. That run answered a question I'd been quietly worried about: I'd only ever built and tested against libphonenumber 9.0.33 on macOS. Ubuntu's package repos ship 8.x. All eight jobs passed on the first try, which was a relief I probably didn't need to feel this strongly about.
+
+Publishing itself had one hiccup: the default RubyGems API key scope is read-only, so my first `rake release` failed with "This API key cannot perform the specified action on this gem." Fixed by adding push scope to the key, but by then the git tag had already been pushed, so the recovery is `gem push` directly rather than re-running `rake release`, which would just fail again on the existing tag.
+
+---
+
+## Falling Down the Native Gem Hole
+
+This is the part that ate most of the week.
+
+`gem install pico_phone` originally meant: get a C++ compiler, install CMake, then install libphonenumber and its transitive dependencies through Homebrew or apt. Fine for me, a real barrier for anyone trying to add it to a Dockerfile. The fix is what nokogiri and grpc do: ship pre-compiled, platform-specific binaries so most users never compile anything.
+
+I assumed I'd need to vendor three libraries: libphonenumber, protobuf, abseil. Homebrew's formula corrected me:
+
+```ruby
+depends_on "abseil"
+depends_on "boost"
+depends_on "icu4c@78"
+depends_on "protobuf"
+```
+
+Five libraries, not three. Boost and ICU are large enough that "vendor the source and build it in CI" stopped being an obvious plan and became a real project. Before committing to it, I ran `otool -L` on the compiled extension to see what it *actually* linked against:
+
+```
+lib/pico_phone/pico_phone.bundle:
+  /opt/homebrew/opt/libphonenumber/lib/libphonenumber.9.dylib
+  libruby.3.4.dylib
+  /usr/lib/libc++.1.dylib
+  /usr/lib/libSystem.B.dylib
+```
+
+Good news: only libphonenumber directly. Boost, ICU, protobuf, and abseil are libphonenumber's problem, not mine, directly. Bad news: Homebrew only ships `libphonenumber.a` as a static archive, and protobuf and abseil are dynamic-only. To get a truly self-contained `.so`, I had to build protobuf and abseil from source with `-DBUILD_SHARED_LIBS=OFF`, then build libphonenumber against those static archives. Same path nokogiri takes with libxml2, just with a longer dependency chain.
+
+Two platform-specific fights came out of that:
+
+**Boost on macOS.** As of Boost 1.90, `boost::system` became header-only and `libboost_system.a` stopped existing. Passing it to the linker anyway just gets you "file not found" until you realize the fix is to remove it from the list, not find it somewhere else.
+
+**ICU on Linux.** The first Linux CI run failed at link time:
+
+```
+relocation R_X86_64_PC32 against symbol `_ZTVN6icu_7413UnicodeStringE'
+can not be used when making a shared object; recompile with -fPIC
+```
+
+Ubuntu's `libicu-dev` static archives simply aren't compiled with `-fPIC`, so they can't go into a shared object. macOS never hits this because Homebrew compiles everything with `-fPIC` by default. The pragmatic fix was linking ICU dynamically on Linux instead. `libicu74` ships as part of the Ubuntu 24.04 base system, so in practice it's invisible to users, even though it means the Linux gem isn't *quite* as self-contained as the macOS one. Building ICU from source with `-fPIC` would close that gap; I decided it wasn't worth it yet.
+
+The payoff: `arm64-darwin`, `x86_64-linux`, and `aarch64-linux` gems, none of which require anything to compile on install. Only the macOS one is fully self-contained, though, and it shows: at around 13.7 MB, it's on the large side for a Ruby gem, mostly because it bakes in `libicudata`, Unicode's character tables, locale data, and collation rules, on its own 8-10 MB. The Linux gems link ICU dynamically instead of statically, so they come in noticeably smaller. I tried stripping debug symbols to shrink the macOS gem and it didn't move the needle at all: the bulk of the size is actual Unicode data, not symbols, so there was barely anything to strip.
+
+---
+
+## Locking the Door Behind Me
+
+Publishing a gem to the world means someone else's `bundle install` now depends on you not getting compromised. Before calling it done, I went through the release pipeline looking for the obvious ways that could go wrong: pinning GitHub Actions to commit SHAs instead of tags, adding an explicit `permissions: contents: read` block so only the release job can write, enabling branch protection on `main`, wiring up Dependabot.
+
+The one I'm most glad I did: RubyGems trusted publishing. Instead of a long-lived API key sitting in a GitHub secret forever, the release workflow now mints a short-lived credential via OIDC at publish time. I didn't just wire it up and assume it worked. I cut a no-op patch release specifically to watch the logs and confirm a fresh key was actually being minted, not the old secret. It was. I left the old key in place as a manual fallback, but the workflow doesn't touch it anymore.
+
+I also added CodeQL and a sanitizer build. `-fsanitize=address,undefined` recompiles the extension with AddressSanitizer and UndefinedBehaviorSanitizer instrumentation baked in, then runs the full RSpec suite (loaded via `LD_PRELOAD` on Linux, `DYLD_INSERT_LIBRARIES` on macOS) against that instrumented build instead of the normal one. ASan catches memory bugs that C++ will happily let slide silently: buffer overflows, use-after-free, double-frees. UBSan catches the C++-specific undefined-behavior category: signed integer overflow, misaligned pointer access, invalid enum values, the kind of thing that "works" on your machine and then corrupts memory on someone else's. Neither turns up in a normal test run; both would crash loudly the moment the instrumented binary hit the bad code path. For a C++ extension parsing untrusted string input from Ruby callers, that felt less like paranoia and more like the actual bar.
+
+---
+
+## What I'd Tell Past Me
+
+If I'd known in December 2024 what "finishing this" actually meant (Rice's VALUE/Object footgun, five transitive C++ dependencies, a Boost API change I hadn't heard of, OIDC trusted publishing) I might have talked myself out of the free week entirely. I'm glad I didn't know.
+
+The gem is small. It does one thing, and it does it by getting out of the way and letting a C++ library that Google maintains do the actual work. But the eighteen months between "wraps a couple of methods" and "gem install works" is where all of the real learning was: not in writing the C++, but in everything around it that makes a piece of software something other people can actually depend on.
+
+`aarch64-linux` CI is still missing a dedicated job, and Linux's ICU linking is dynamic when I'd like it to be static. Small things. As of this writing, [RubyGems](https://rubygems.org/gems/pico_phone) shows more than 4,400 downloads, more than I expected for a gem that's been public for a few days. I'm honestly not sure what that number represents, since it counts every `bundle install` and CI run right along with an actual person choosing to depend on this, so I'm treating it as a nice number rather than a real usage signal. For now, though: `gem install pico_phone`.

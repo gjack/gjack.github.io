@@ -7,10 +7,10 @@ const Pre = (props) => (
     component="pre"
     sx={{
       padding: 3,
-      backgroundColor: '#2d2d2d',
+      backgroundColor: '#1e1e1e',
       borderRadius: '4px',
       overflow: 'auto',
-      color: '#e8e8e8',
+      color: '#d4d4d4',
       marginBottom: 3,
       marginTop: 3,
       boxShadow: '0 2px 8px rgba(0, 0, 0, 0.15)',
@@ -19,20 +19,23 @@ const Pre = (props) => (
         fontFamily: '"Fira Code", "Courier New", Consolas, Monaco, monospace',
         fontSize: '0.95rem',
         lineHeight: 1.8,
-        color: '#e8e8e8',
+        color: '#d4d4d4',
         backgroundColor: 'transparent',
         padding: 0,
         border: 'none',
       },
-      // Add some basic syntax-like styling for common patterns
-      '& .token.comment': { color: '#7c7c7c', fontStyle: 'italic' },
-      '& .token.keyword': { color: '#c678dd' },
-      '& .token.string': { color: '#98c379' },
-      '& .token.function': { color: '#61afef' },
-      '& .token.number': { color: '#d19a66' },
-      '& .token.operator': { color: '#56b6c2' },
-      '& .token.class-name': { color: '#e5c07b' },
-      '& .token.punctuation': { color: '#cccccc' },
+      // Token colors, chosen for contrast against the #1e1e1e background
+      '& .token.comment': { color: '#93a1a1', fontStyle: 'italic' },
+      '& .token.keyword': { color: '#ff79c6' },
+      '& .token.string, & .token.string-literal, & .token.char, & .token.regex': { color: '#a5d6a7' },
+      '& .token.function, & .token.generic-function, & .token.method-definition': { color: '#82aaff' },
+      '& .token.number, & .token.boolean, & .token.constant': { color: '#f78c6c' },
+      '& .token.operator': { color: '#89ddff' },
+      '& .token.class-name, & .token.builtin': { color: '#ffcb6b' },
+      '& .token.punctuation': { color: '#d4d4d4' },
+      '& .token.tag, & .token.property, & .token.attr-name, & .token.symbol, & .token.deleted': { color: '#ff8b92' },
+      '& .token.variable, & .token.namespace': { color: '#f8f8f2' },
+      '& .token.important, & .token.inserted': { color: '#a5d6a7', fontWeight: 'bold' },
     }}
     {...props}
   />
