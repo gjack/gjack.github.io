@@ -1,0 +1,5 @@
+{
+    "componentChunkName": "component---src-templates-tags-js",
+    "path": "/tags/rag/",
+    "result": {"data":{"allMdx":{"totalCount":1,"edges":[{"node":{"id":"300de738-faf9-53bb-8ce4-d2a80544605c","slug":"2026-07-10-knitting-assistant-search-and-chat/","frontmatter":{"title":"Building a Knitting Pattern Assistant, Part 2: From Searchable Library to Grounded Chat","date":"10 July, 2026"},"timeToRead":15,"excerpt":"Last time , I wrote about turning a knitting pattern PDF into a clean, structured  pattern_document : OCR text, extracted metadata, and plain-English…"}}]}},"pageContext":{"tag":"RAG"}},
+    "staticQueryHashes": ["2201243204","2484670584","469546184"]}
