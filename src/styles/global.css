@@ -1,0 +1,6 @@
+/* Per-image width override for markdown images wrapped in <div className="wide-image">.
+   gatsby-remark-images sets an inline max-width on .gatsby-resp-image-wrapper based on the
+   site-wide maxWidth option (600px); !important here is required to beat that inline style. */
+.wide-image .gatsby-resp-image-wrapper {
+  max-width: 1000px !important;
+}

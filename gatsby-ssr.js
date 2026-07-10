@@ -7,6 +7,7 @@ import mdxComponents from './src/components/mdx-components';
 
 // PrismJS syntax highlighting theme
 import 'prismjs/themes/prism-okaidia.css';
+import './src/styles/global.css';
 
 export const wrapRootElement = ({ element }) => (
   <ThemeProvider theme={theme}>
