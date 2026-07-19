@@ -4,3 +4,17 @@
 .wide-image .gatsby-resp-image-wrapper {
   max-width: 1000px !important;
 }
+
+/* Inline code (single backtick). gatsby-remark-prismjs renders all `code` nodes, including
+   inline ones, straight to raw HTML at build time, bypassing the InlineCode MDX component in
+   mdx-components.js entirely. Style it here instead. :not(pre) > code excludes code blocks,
+   whose <code> is always a direct child of <pre> and keeps the Prism okaidia theme. */
+article :not(pre) > code {
+  font-family: "Fira Code", "Courier New", monospace;
+  font-size: 0.9em;
+  background-color: #eef0f2;
+  color: #1d2731;
+  padding: 0.15em 0.4em;
+  border-radius: 3px;
+  border: 1px solid #dde1e4;
+}

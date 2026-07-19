@@ -56,12 +56,12 @@ const InlineCode = ({ className, ...props }) => {
       component="code"
       sx={{
         fontFamily: '"Fira Code", "Courier New", monospace',
-        fontSize: '0.875em',
-        backgroundColor: '#f5f5f5',
-        color: '#c7254e',
-        padding: '0.2em 0.4em',
+        fontSize: '0.9em',
+        backgroundColor: '#eef0f2',
+        color: '#1d2731',
+        padding: '0.15em 0.4em',
         borderRadius: '3px',
-        border: '1px solid #e1e1e1',
+        border: '1px solid #dde1e4',
       }}
       {...props}
     />

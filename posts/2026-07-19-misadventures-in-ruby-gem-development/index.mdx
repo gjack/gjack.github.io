@@ -1,0 +1,114 @@
+---
+title: Misadventures in Ruby Gem Development
+date: 2026-07-19
+tags: [Ruby, C++, gems, ABI, open source]
+categories: []
+draft: false
+---
+
+In [a previous post](/blog/2026-07-05-pico-phone-first-gem/), I wrote about shipping my first Ruby gem: pico_phone, a Ruby extension wrapping Google's C++ [libphonenumber](https://github.com/google/libphonenumber) library.
+
+By pico_phone `0.6.1` I felt like I was in the coasting part of maintaining a gem. Features were in, the native binaries were building in CI, and I was just shipping small releases as I found things to add. Then I went looking for a completely unrelated fix and ended up finding out that **every native gem I had ever published was broken**. Not "broken on some machines." Broken for everyone, on every platform, since the very first one.
+
+<div style="text-align: center">
+  <img src="/misadventures-in-ruby-gem-development/this-is-fine.gif" alt="This is fine dog sitting at a table in a room that's on fire" style="max-width: 100%" />
+</div>
+
+---
+
+## It all started with a badge
+
+It started with something dumb: the RubyGems version badge in the README was showing an old version number. I chased that down and it turned out to be a stale GitHub camo cache, badge.fury.io's SVG URL doesn't change as the gem version changes, so GitHub's image proxy was just serving whatever it had cached from before. A cache-busting query param fixed it in five minutes.
+
+But fixing it meant opening the README, and opening the README meant noticing the CI matrix only tested Ruby up to 3.4. Ruby 4.0 had been out for a while at that point (it shipped on Ruby's 30th anniversary, skipping 3.5 entirely and going straight to 4.0 as a branding move, not a signal of some huge breaking change). I'd never once tested pico_phone against it, probably because I didn't have Ruby 4 installed in my machine. Seemed like an easy thing to knock out while I was already in there.
+
+Only it was not an easy thing to knock out.
+
+## Adding Ruby 4.0 Felt Like the Easy Part
+
+pico_phone ships a C++ extension built with [Rice](https://github.com/ruby-rice/rice), a header-only C++/Ruby binding library. The version I had locked, 4.5.0, predated Rice's own Ruby 4.0 support, which landed in 4.10.0. So step one was bumping Rice, then adding `4.0` to the CI matrix, then confirming the extension still built and the full spec suite still passed across every platform and build path I ship: arm64-darwin, x86_64-linux, aarch64-linux, both the dynamic build and the vendored static one. All green. I shipped it as its own PR and felt done.
+
+But I was not done. I just hadn't found the actual problem yet.
+
+## Wait, Do the Precompiled Gems Even Work on Ruby 4?
+
+Sitting there after the CI PR merged, I started wondering something that felt almost too basic to ask: had I actually verified that the precompiled binaries work for people on different Ruby versions, or was I just trusting Ruby's documented ABI promise and assuming it held? The gem was new enough that I didn't have any user reports to lean on either way, nobody had installed it on enough different setups yet for a problem to surface on its own. It felt like a slightly silly question given how early it was, but I couldn't stop thinking about it.
+
+My release workflow built exactly one binary per platform, always with Ruby 3.3, and shipped that same binary to anyone on Ruby 3.1 through 3.4. I'd never once tried to load that binary under a Ruby version it wasn't built with. So I built the extension under 3.3, the same way `release.yml` did, and tried to load it under Ruby 4.0:
+
+```
+LoadError: linked to incompatible .../ruby/3.3.12/lib/libruby.3.3.dylib - pico_phone.bundle
+```
+
+Reasonable enough on its face. I figured this was just "the ABI promise doesn't extend across the Ruby 4.0 boundary," which is documented and expected for a major bump. My plan was to build one binary per major series, 3.x and 4.x, each compiled against the oldest minor in that series, and pick the right one at require time. Clean fix, proportionate to the problem.
+
+Except it turned out not to be the actual bug at all.
+
+## The Real Bug Had Nothing to Do With Ruby 4
+
+While I was validating that plan, I tried something that should have been a non-issue: loading a binary built under Ruby 3.1 on Ruby 3.3. Same major series. Ruby's own ABI promise says that should just work.
+
+```
+LoadError: linked to incompatible .../ruby/3.1.7/lib/libruby.3.1.dylib
+```
+
+It didn't. Same failure, same major series, no Ruby 4 involved at all. That's the moment I knew I'd been solving the wrong problem.
+
+I pulled up `otool -L` on the compiled extension to see what it actually linked against, and there it was: an absolute, machine-specific path to `libruby`. Turns out Ruby builds configured with `--enable-shared`, which is what `ruby/setup-ruby`'s prebuilt binaries use, what the official Docker Ruby images use, and what `mise`/`ruby-build` default to, make `mkmf` hard-link every compiled extension against a build-specific `libruby.so` or `.dylib` through a Makefile variable called `LIBRUBYARG_SHARED`. This is on top of `-Wl,-undefined,dynamic_lookup`, which is already sufficient on its own for resolving Ruby symbols at load time. On macOS that dependency bakes in as a literal absolute path, something like `/Users/me/.local/share/mise/installs/ruby/3.3.12/lib/libruby.3.3.dylib`, or wherever `ruby/setup-ruby` happened to install to on that day's CI runner. A path that cannot exist on any machine except the one that compiled the extension.
+
+I wanted to know how far this actually went, so I stopped testing local builds and downloaded the real, currently published `pico_phone-0.6.1-arm64-darwin.gem` straight from rubygems.org. Tried to load it on a Ruby it wasn't built with. Failed. Tried it on the exact Ruby version it was supposedly built for, just freshly installed somewhere else. Also failed, because the absolute-path dependency doesn't care about Ruby version at all, it only cares about the exact build machine and the exact path that machine used.
+
+Every precompiled native gem pico_phone has ever published has been broken, for every user, on every platform, regardless of Ruby version, going back to when native gem builds were first introduced at `0.2.0`. Nobody's `gem install pico_phone` on a native platform ever actually used the precompiled binary, because RubyGems and Bundler prefer a matching native gem over the source gem by default. This had probably been silently causing install failures the entire time, and it's exactly the kind of bug nobody files an issue about, because it looks identical to a flaky network install and most people just retry or fall back without a second thought.
+
+<div style="text-align: center">
+  <img src="/misadventures-in-ruby-gem-development/oh-no.gif" alt='Shocked, wide-eyed "oh no" reaction' style="max-width: 100%" />
+</div>
+
+The fix itself was small once I found it: strip `$LIBRUBYARG_SHARED` and `$LIBRUBYARG` to empty strings in `extconf.rb` right before `create_makefile`. The `dynamic_lookup` flag alone is enough. That hard dependency was pure liability that had been sitting there since day one.
+
+## A Second Bug Hiding Behind the First
+
+With the linking fix in place, the Ruby-3.1-built binary now loaded fine under 3.3, 3.4, and 4.0. Loading isn't the same as working, though:
+
+```ruby
+# built under Ruby 3.1, run under Ruby 3.3:
+PicoPhone::PhoneNumber.new("4155552671")
+# => TypeError: no implicit conversion of nil into String
+```
+
+This one is a nastier class of bug than a `LoadError`. A `LoadError` fails loud and immediate. This fails quietly, deep inside normal usage, and in a slightly different shape it could just as easily produce a wrong validation result instead of a crash.
+
+My working theory, and I still think it's right: Rice is header-only as of version 4. Some of Ruby's C API gets exposed through inline macros and functions that compile directly into the extension using whatever Ruby minor's headers happened to be present at build time, which bakes that minor's internal struct layout straight into the compiled binary. The "stable across a major series" promise Ruby makes covers the plain function-call C API. It was never a promise about inlined, header-level access patterns staying compatible too. A header-only binding library is exactly the kind of dependency most likely to lean on the part of the API that promise doesn't cover.
+
+That killed the "one binary per major series" plan entirely, separate from the linking fix. I went back to one binary per Ruby minor actually tested in CI, 3.1 through 3.4 and 4.0, selected by exact match only at require time, no cross-minor fallback. Build Ruby always equals run Ruby, by construction, so this whole class of bug can't happen. It's the same approach nokogiri and grpc already take for their native extensions. I'd always assumed that was extra caution on their part. Now I understand it's load-bearing.
+
+## Testing the Fix for Real
+
+None of the above got taken on faith at any point, and that discipline is the only reason I found the full scope of it instead of just patching the symptom in front of me:
+
+- I didn't stop at "the fix builds." I checked that a binary built on one Ruby actually loads *and produces correct output* on a genuinely different Ruby, installed from a real packaged `.gem` via `gem install --local`, not just required directly out of a build directory.
+- I didn't assume the shipped gem was fine because it had been out for weeks with no complaints. I downloaded the real artifact from rubygems.org and tried to break it, which is the only reason I found out the bug covered every version back to `0.2.0` instead of just assuming it started with 0.6.x.
+- I didn't trust that the fix would work in CI just because it worked locally. I added a `workflow_dispatch` trigger specifically so I could run the real `release.yml` native-build jobs on the branch before merging, then downloaded those actual build artifacts and exercised them (parse, validate, geocode, carrier lookup, timezone lookup, not just "did require succeed") across all three platforms through Docker before I'd call the PR mergeable.
+- I hit a false alarm along the way. Linux verification first failed with `libicui18n.so.74: cannot open shared object file`, which looked like a fresh bug. It wasn't. `extconf.rb`'s dynamic ICU linking on Linux assumes an Ubuntu 24.04 runtime, and the Docker Ruby images I was using for the quick local test are Debian-based with a different ICU version. Rebuilding the test against an actual `ubuntu:24.04` base image with `libicu74` installed passed cleanly. Worth remembering: not every failure you hit while verifying a fix was caused by the fix. Isolate before you assume.
+- I also caught a bug in the fix's own loader logic before it shipped. An early draft picked buckets by "closest minor at or below the running minor," which would have silently excluded the whole bucket for anyone running a minor *older* than what got built, say Ruby 3.1 with only a 3.4-built bucket available. That only surfaced because I explicitly asked what happens to someone on an older Ruby than what I build for, not something the happy-path tests would ever have caught.
+
+## Yanking Every Broken Gem I'd Ever Shipped
+
+<div style="text-align: center">
+  <img src="/misadventures-in-ruby-gem-development/nope.gif" alt="A person hits a big red NOPE button that fires a ray wiping everything out" style="max-width: 100%" />
+</div>
+
+Once the fix was live as `0.6.2`, the obvious next question was what to do about every prior release. RubyGems doesn't let you overwrite a published version-and-platform combination, by design, so nobody can silently swap a version out from under people who already trust it. There was never a way to fix `0.6.1`'s native gem in place. The only path forward was a new version number.
+
+So I yanked the broken native platform variants, arm64-darwin, x86_64-linux, aarch64-linux, across every affected version: `0.2.0` through `0.6.1`, 23 version-and-platform combinations in total. I left each version's plain `ruby` source gem untouched. Yanking a version-and-platform doesn't remove the whole version; `gem install pico_phone -v 0.6.1` still works after the yank, it just falls back to compiling from source instead of grabbing a binary that can't load. `0.1.0` was unaffected since native gems didn't exist yet at that version.
+
+
+## What I'd Tell Past Me
+
+The badge fix took five minutes. What it led to took a few hours and involved yanking every native gem I'd published since day one, all of them in good faith, believing they worked. A stale badge cache turning into that is a ridiculous size mismatch, and it's honestly the part that sticks with me the most.
+
+But strip away the C++ and the ABI details and what's actually underneath all of it is the oldest lesson in the book: it worked on my machine. Every developer hears that line as a joke at some point, usually about someone else's bug. Mine was the literal version of it, not the metaphor. The binary didn't just happen to work in an environment similar to my laptop, it was hard-linked to a path that could only ever exist on my laptop. I'd built something that was never going to work anywhere else, and the reason nobody noticed (besided the fact that this gem is so new it probably doesn't have many adopters yet) is that "gem install" quietly falling back to compiling from source looks exactly like success.
+
+If you ship native gems and you've only ever built and tested on the machines that also compiled the binary, it's worth running `otool -L` or `ldd` on the actual compiled extension and looking at what it links against. Not what you assume it links against. What it actually does. `-Wl,-undefined,dynamic_lookup` is already doing the job you think `LIBRUBYARG_SHARED` is doing, and that second one is just quietly baking your build machine's filesystem into a binary you're about to hand to strangers, which is "it works on my machine" turned into a permanent, shippable artifact.
+
+pico_phone `0.6.2` is out now with real per-minor native gems and no absolute paths anywhere in them. `gem install pico_phone` should actually mean what it says this time, on a machine that isn't mine.
