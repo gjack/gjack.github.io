@@ -1,0 +1,59 @@
+---
+title: pico_phone Now Runs on Alpine, and I'm Exploring a New RubyGems Feature
+date: 2026-11-21
+tags: [Ruby, C++, gems, open source, RubyGems]
+categories: []
+draft: false
+---
+
+Two things happened with pico_phone since the last update. One is done and shipped. The other is a prerelease I want people to go kick the tires on before it's the only option.
+
+---
+
+## Alpine was the gap I kept hearing about
+
+Every platform pico_phone shipped for was glibc: Debian, Ubuntu, RHEL if you forced the source build. Anyone running Alpine in a container, which is a lot of people once you're trying to keep image size down, got nothing. `gem install pico_phone` would try to compile from source and just fail, because Alpine doesn't have a libphonenumber-dev package to link against.
+
+musl is a different C library than glibc, and that difference isn't cosmetic for a gem that's mostly a C++ extension wearing a Ruby trenchcoat. No system libphonenumber means I had to statically link ICU into the Alpine build from the start, instead of linking dynamically against whatever the system provides, which is what the glibc builds do.
+
+Getting it building locally in an Alpine Docker container was the fast part. Wiring it into the actual release pipeline is where the gotchas showed up, and they were dumb in the specific way infrastructure gotchas usually are:
+
+- My packaging script only knew how to tag "darwin" or "generic linux." A musl build would have come out tagged exactly like the glibc one. Same filename pattern, same platform string, no way for RubyGems to tell them apart. Which means a musl user installing it would've silently gotten the glibc binary and watched it fail to load, and I'd have had no idea why, because from where I sit it would've looked like a successful release.
+- GitHub's hosted ARM64 runners don't support the checkout/upload-artifact actions inside an Alpine container. Not documented anywhere I found before hitting it. Had to run everything on the regular glibc runner and drive Alpine through `docker run` by hand, including chowning files the root-owned container wrote before anything on the host side could touch them.
+- And then, after all of that was green and I shipped 0.7.0, I went and tried requiring the gem on a bare `ruby:alpine` image with nothing else installed. `Error loading shared library libstdc++.so.6`. The official Alpine Ruby images don't ship libstdc++ by default, and I'd statically linked ICU but left libstdc++ dynamic. So the gem worked, but only after you ran `apk add libstdc++` first, which defeats the entire point of a precompiled gem. Fixed that one in 0.7.1 by embedding the C++ runtime statically too, same as everything else on that platform.
+
+None of that is interesting on its own. What's interesting to me is that it's the same lesson as always: a build that only gets tested on the machine that built it isn't tested. It just hasn't failed in front of you yet.
+
+As of 0.7.1, `x86_64-linux-musl` and `aarch64-linux-musl` are real precompiled targets, same deal as everywhere else: no compiler, no system packages, `bundle install` just picks the right binary. If you're on Alpine, this is the release where that stops being a gap.
+
+---
+
+## The part I actually want you to try
+
+RubyGems and Bundler 4.1 shipped something called content-addressable gems, and it's the first thing in a while that made me want to go restructure how pico_phone ships instead of just bumping a version number.
+
+Here's the problem it's solving. A native gem like pico_phone can't publish one binary per platform and call it done, because a binary compiled against Ruby 3.1's headers won't reliably run under Ruby 3.4, for reasons I went into at length in the last post about this gem. So the convention, the one nokogiri and grpc already use and the one I ended up adopting too, is to build a separate binary for every Ruby ABI series and ship them all bundled into one gem per platform. Install on Ruby 3.4, you get the 3.4 binary. Install on 4.0, you get that one. One gem, five binaries inside it, pick-the-right-one-at-require-time.
+
+Which works. It also means every install pulls down all five, even though you will only ever run one of them. For `arm64-darwin` that fat gem is sitting around 92MB right now. Most of that is dead weight in every single install, every CI cache, every Docker layer that happens to copy `vendor/bundle` forward (and plenty of Dockerfiles do exactly that, including ones I've looked at recently for unrelated reasons).
+
+Content-addressable gems split that apart. Instead of one gem per platform with everything stuffed inside, each platform-and-Ruby-ABI pair gets its own small gem, named by a content hash instead of a version number. Your install only ever fetches the one slice you actually need.
+
+I published this as an opt-in prerelease, `0.9.0.pre.ca1`, sitting alongside the normal releases and changing nothing about how those work. You need RubyGems/Bundler 4.1 or newer (`gem update --system`) and Ruby 3.2 or newer, since RubyGems 4.1 itself doesn't run on 3.1. To try it:
+
+```
+gem install pico_phone --pre
+```
+
+or pin it directly in a Gemfile:
+
+```ruby
+gem 'pico_phone', '0.9.0.pre.ca1'
+```
+
+A plain `gem install pico_phone` with no `--pre` will never touch this version. It's not going to surprise anyone who isn't already asking for it.
+
+It will be rebuilt as `ca2`, `ca3`, and so on each time I cut a normal release, so it's never behind on libphonenumber. And it's genuinely not ready for anything you depend on, I want to be upfront about that. It's new, the tooling around it is new, and I'd rather find the rough edges from a handful of people trying it on purpose than from someone's production Gemfile.lock.
+
+If it does become the standard way native gems ship, which is the whole point of RubyGems building it, the fat-gem tax that's been sitting in every native extension install just goes away, for pico_phone and for every other gem that adopts it. Nothing about the API changes. You'd just stop paying for four Ruby ABIs you were never going to run.
+
+So: if you haven't tried pico_phone yet, this is a good time, musl included. And if you're already using it and want to help find out whether this packaging change actually holds up, `--pre` is right there.
